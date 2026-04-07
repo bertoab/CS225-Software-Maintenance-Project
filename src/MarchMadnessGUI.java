@@ -302,7 +302,7 @@ public class MarchMadnessGUI extends Application {
     /**
      * Creates a spacer for centering buttons in a ToolBar
      */
-    private Pane createSpacer(){
+    private static Pane createSpacer(){
         Pane spacer = new Pane();
         HBox.setHgrow(
                 spacer,
@@ -409,7 +409,7 @@ public class MarchMadnessGUI extends Application {
      * and if the error is bad enough closes the program
      * @param fatal true if the program should exit. false otherwise
      */
-    private void showError(Exception e,boolean fatal){
+    private static void showError(Exception e,boolean fatal){
         String msg=e.getMessage();
         if(fatal){
             msg=msg+" \n\nthe program will now close";
@@ -430,7 +430,7 @@ public class MarchMadnessGUI extends Application {
      * alerts user to the result of their actions in the login pane 
      * @param msg the message to be displayed to the user
      */
-    private void infoAlert(String msg){
+    private static void infoAlert(String msg){
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("March Madness Bracket Simulator");
         alert.setHeaderText(null);
@@ -443,7 +443,7 @@ public class MarchMadnessGUI extends Application {
      * to clear all predictions from their bracket
      * @return true if the yes button clicked, false otherwise
      */
-    private boolean confirmReset(){
+    private static boolean confirmReset(){
         Alert alert = new Alert(AlertType.CONFIRMATION, 
                 "Are you sure you want to reset the ENTIRE bracket?", 
                 ButtonType.YES,  ButtonType.CANCEL);
@@ -459,7 +459,7 @@ public class MarchMadnessGUI extends Application {
      * seralizedBracket
      * @param B The bracket the is going to be seralized
      */
-    private void seralizeBracket(Bracket B){
+    private static void seralizeBracket(Bracket B){
         FileOutputStream outStream = null;
         ObjectOutputStream out = null;
     try 
@@ -481,7 +481,7 @@ public class MarchMadnessGUI extends Application {
      * @param filename of the seralized bracket file
      * @return deserialized bracket 
      */
-    private Bracket deseralizeBracket(String filename){
+    private static Bracket deseralizeBracket(String filename){
         Bracket bracket = null;
         FileInputStream inStream = null;
         ObjectInputStream in = null;
@@ -503,7 +503,7 @@ public class MarchMadnessGUI extends Application {
      * deseralizedBracket
      * @return deserialized bracket
      */
-    private ArrayList<Bracket> loadBrackets()
+    private static ArrayList<Bracket> loadBrackets()
     {   
         ArrayList<Bracket> list=new ArrayList<Bracket>();
         File dir = new File(".");
