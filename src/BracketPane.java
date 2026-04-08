@@ -19,7 +19,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-import java.io.IOException;
+// import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -105,11 +105,12 @@ public class BracketPane extends BorderPane {
                         int treeNum = bracketMap.get(n);
                         String teamName = currentBracket.getBracket().get(treeNum);
                         try {
-                                TournamentInfo info = new TournamentInfo();
-                                Team t = info.getTeam(teamName);
+                                //LIOR: changed to work with reworked TournamentInfo
+                                Team t = TournamentInfo.getTeam(teamName);
                                 //by Tyler - added the last two pieces of info to the pop up window
                                 text += "Team: " + teamName + " | Ranking: " + t.getRanking() + "\nMascot: " + t.getNickname() + "\nInfo: " + t.getInfo() + "\nAverage Offensive PPG: " + t.getOffensePPG() + "\nAverage Defensive PPG: "+ t.getDefensePPG();
-                        } catch (IOException e) {//if for some reason TournamentInfo isnt working, it will display info not found
+                        } catch (Exception e) {//if for some reason TournamentInfo isnt working, it will display info not found
+                                //LIOR: changed IOException to Exception
                                 text += "Info for " + teamName + "not found";
                         }
                         //create a popup with the team info
@@ -170,7 +171,8 @@ public class BracketPane extends BorderPane {
                 buttons.add(customButton("SOUTH"));
                 buttons.add(customButton("FULL"));
 
-                ArrayList<GridPane> gridPanes = new ArrayList<>();
+                //LIOR: commented this out because it's not doing anything
+                // ArrayList<GridPane> gridPanes = new ArrayList<>();
 
                 for (int m = 0; m < buttons.size() - 1; m++) {
                         roots.add(new Root(3 + m));

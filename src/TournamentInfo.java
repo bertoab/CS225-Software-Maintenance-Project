@@ -1,27 +1,41 @@
+//LIOR: commented out unused imports
 import java.io.*;
-import java.net.URL;
+//import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.ExecutionException;
+//import java.util.concurrent.ExecutionException;
 
 
 /**
  * Created by Artem on 5/2/2017.
  */
-public class TournamentInfo{//renamed from teamInfo by matt 5/4
-    HashMap<String, Team> teams;
 
-    public TournamentInfo() throws IOException{
-        teams = new HashMap<>();
-        loadFromFile();
-    }
+/*
+ * LIOR: made the methods of this class static, changing the method calls in other classes to call
+ * these methods rather than methods on an instance of this class. 
+ * Moved simulate() to the Bracket class.
+ * Added method getEmptyBracket()
+ */
+
+public class TournamentInfo{//renamed from teamInfo by matt 5/4
+    //LIOR: made teams private & static
+    private static HashMap<String, Team> teams;
+    //LIOR: added an emptyBracket attribute
+    private static ArrayList<String> emptyBracket;
+
+    //LIOR: no need for a constructor like this since this class doesn't need to be instantiated anymore
+    // public TournamentInfo() throws IOException{
+    //     teams = new HashMap<>();
+    //     loadFromFile();
+    // }
 
     /**
      * This private method will load all the team information from the teamInfo.txt file via a BufferedReader and load each team into
      * the teams HashMap using their name as the key and the actual Team object as the data.
      * @authors Artem, Rodrigo
      */
-    private void loadFromFile() throws IOException{
+    public static void loadTeamsFromFile() throws IOException{
+        teams = new HashMap<String, Team>();
 
         String name;
         String nickname;
@@ -30,9 +44,9 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
         double offensivePPG;
         double defensivePPG;
 
-
         try{
-            InputStream u = getClass().getResourceAsStream("teamInfo.txt");
+            //LIOR: replaced getClass() with TournamentInfo.class to make it work as a static method
+            InputStream u = TournamentInfo.class.getResourceAsStream("teamInfo.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(u));
 
             while((name = br.readLine()) != null){
@@ -65,9 +79,11 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
      * @return the Team object for that team
      * @throws Exception in case it's not in there
      */
-    public Team getTeam(String teamName){
+    public static Team getTeam(String teamName){
         return teams.get(teamName);
     }
+
+    //LIOR: moved this method to Bracket
 
     /**
      * This will be the method that actually does the work of determining the outcome of the games.
@@ -107,22 +123,23 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
 
 
 
+    //LIOR: changed return type to void, changed method to just load the arrayList into a stored 
     /**
      * reads Strings from initialMatches.txt into an ArrayList in order to construct the starting bracket
      * @authors Matt, Artem
      * @return ArrayList of Strings
      */
-    public ArrayList<String> loadStartingBracket() throws IOException{
+    public static void loadEmptyBracket() throws IOException {
         String name;
-        ArrayList<String> starting = new ArrayList<String>();
-
+        emptyBracket = new ArrayList<String>();
 
         try{
-            InputStream u = getClass().getResourceAsStream("initialMatches.txt");
+            //LIOR: replaced getClass() with TournamentInfo.class to make it work as a static method
+            InputStream u = TournamentInfo.class.getResourceAsStream("initialMatches.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(u));
 
             while((name = br.readLine()) != null){
-                starting.add(name);
+                emptyBracket.add(name);
             }
             
             br.close();
@@ -130,7 +147,10 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
         catch(IOException ioe){
             throw ioe;
         }
-        return starting;
+    }
 
+    //LIOR: added this method which returns a copy of an empty bracket
+    public static Bracket getEmptyBracket() {
+        return new Bracket(emptyBracket);
     }
 }

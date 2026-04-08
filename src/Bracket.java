@@ -258,5 +258,36 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     public int getTeamScore(int index){
         return teamScores[index];
     }
+
+    //LIOR: moved this method here from TournamentInfo
+    public void simulate(){
+        for (int i = 62; i >= 0; i--) {
+        /* The equation for score that I settled on is this:
+         * (Random int 75-135) * (1 - 0.02 * seed ranking)
+         * This way, the multiplier would be between 0.68 and 0.98. Multiply that by 75-135, and you get a reasonable score with room for chance to prevail for lower teams. */
+
+            int index1 = 2*i+1;
+            int index2 = 2*i+2;
+
+            Team team1 = TournamentInfo.getTeam(bracket.get(index1));
+            Team team2 = TournamentInfo.getTeam(bracket.get(index2));
+
+            int score1 = 0;
+            int score2 = 0;
+            while(score1==score2) {
+                score1 = (int) (((Math.random() * 136) + 75) * (1 - (team1.getRanking() * 0.02)));
+                score2 = (int) (((Math.random() * 136) + 75) * (1 - (team2.getRanking() * 0.02)));
+            }
+
+            setTeamScore(index1, score1);
+            setTeamScore(index2, score2);
+
+            if(score1>score2)
+                moveTeamUp(index1);
+            else
+                moveTeamUp(index2);
+        }
+
+    }
 }
 

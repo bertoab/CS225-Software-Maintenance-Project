@@ -59,7 +59,8 @@ public class MarchMadnessGUI extends Application {
     private Button back;
   
     
-    private  Bracket startingBracket;
+    //LIOR: removed this attribute
+    // private Bracket startingBracket;
     //reference to currently logged in bracket
     private Bracket selectedBracket;
     private Bracket simResultBracket;
@@ -74,16 +75,20 @@ public class MarchMadnessGUI extends Application {
     private TableView table;
     private BracketPane bracketPane;
     private GridPane loginP;
-    private TournamentInfo teamInfo;
+
+    //LIOR: removed this attribute
+    // private TournamentInfo teamInfo;
     
     
     @Override
     public void start(Stage primaryStage) {
+        //LIOR: change this to use reworked TournamentInfo properly
         //try to load all the files, if there is an error display it
         try{
-            teamInfo=new TournamentInfo();
-            startingBracket= new Bracket(teamInfo.loadStartingBracket());
-            simResultBracket=new Bracket(teamInfo.loadStartingBracket());
+            // teamInfo=new TournamentInfo();
+
+            TournamentInfo.loadTeamsFromFile();
+            TournamentInfo.loadEmptyBracket();
         } catch (IOException ex) {
             showError(new Exception("Can't find "+ex.getMessage(),ex),true);
         }
@@ -138,7 +143,9 @@ public class MarchMadnessGUI extends Application {
        scoreBoardButton.setDisable(false);
        viewBracketButton.setDisable(false);
        
-       teamInfo.simulate(simResultBracket);
+       simResultBracket = TournamentInfo.getEmptyBracket();
+       simResultBracket.simulate();
+       
        for(Bracket b:playerBrackets){
            scoreBoard.addPlayer(b,b.scoreBracket(simResultBracket));
        }
@@ -210,7 +217,8 @@ public class MarchMadnessGUI extends Application {
     private void reset(){
         if(confirmReset()){
             //horrible hack to reset
-            selectedBracket=new Bracket(startingBracket);
+            //LIOR: changed this to work with reworked TournamentInfo
+            selectedBracket=new Bracket(TournamentInfo.getEmptyBracket());
             bracketPane=new BracketPane(selectedBracket);
             displayPane(bracketPane);
         }
@@ -223,7 +231,7 @@ public class MarchMadnessGUI extends Application {
            simulate.setDisable(false);
            login.setDisable(false);
            //save the bracket along with account info
-           seralizeBracket(selectedBracket);
+           serializeBracket(selectedBracket);
             
        }else{
             infoAlert("You can only finalize a bracket once it has been completed.");
@@ -377,7 +385,9 @@ public class MarchMadnessGUI extends Application {
                 //check for empty fields
                 if(!name.equals("")&&!playerPass.equals("")){
                     //create new bracket
-                    Bracket tmpPlayerBracket = new Bracket(startingBracket, name);
+                    //LIOR: changed this to work with reworked TournamentInfo
+                    Bracket tmpPlayerBracket = TournamentInfo.getEmptyBracket();
+                    tmpPlayerBracket.setPlayerName(name);
                     playerBrackets.add(tmpPlayerBracket);
                     tmpPlayerBracket.setPassword(playerPass);
 
@@ -459,29 +469,29 @@ public class MarchMadnessGUI extends Application {
      * seralizedBracket
      * @param B The bracket the is going to be seralized
      */
-    private static void seralizeBracket(Bracket B){
+    private static void serializeBracket(Bracket B) {
+
         FileOutputStream outStream = null;
         ObjectOutputStream out = null;
-    try 
-    {
-      outStream = new FileOutputStream(B.getPlayerName()+".ser");
-      out = new ObjectOutputStream(outStream);
-      out.writeObject(B);
-      out.close();
-    } 
-    catch(IOException e)
-    {
-      // Grant osborn 5/6 hopefully this never happens 
-      showError(new Exception("Error saving bracket \n"+e.getMessage(),e),false);
+
+        try {
+            outStream = new FileOutputStream(B.getPlayerName() + ".ser");
+            out = new ObjectOutputStream(outStream);
+            out.writeObject(B);
+            out.close();
+        } catch (IOException e) {
+            // Grant osborn 5/6 hopefully this never happens
+            showError(new Exception("Error saving bracket \n" + e.getMessage(), e), false);
+        }
     }
-    }
+
     /**
      * Tayon Watson 5/5
      * deseralizedBracket
      * @param filename of the seralized bracket file
      * @return deserialized bracket 
      */
-    private static Bracket deseralizeBracket(String filename){
+    private static Bracket deserializeBracket(String filename){
         Bracket bracket = null;
         FileInputStream inStream = null;
         ObjectInputStream in = null;
@@ -512,7 +522,7 @@ public class MarchMadnessGUI extends Application {
             String extension = fileName.substring(fileName.lastIndexOf(".")+1);
        
             if (extension.equals("ser")){
-                list.add(deseralizeBracket(fileName));
+                list.add(deserializeBracket(fileName));
             }
         }
         return list;
