@@ -363,11 +363,14 @@ public class BracketPane extends BorderPane {
 
                 public Root(int location) {
                         this.location = location;
-                        createVertices(420, 200, 100, 20, 0, 0);
-                        createVertices(320, 119, 100, 200, 1, 0);
-                        createVertices(220, 60, 100, 100, 2, 200);
-                        createVertices(120, 35, 100, 50, 4, 100);
-                        createVertices(20, 25, 100, 25, 8, 50);
+
+                        //Matthew Tummino
+                        //Adjusted values to better fit school names
+                        createVertices(500, 200, 120, 20, 0, 0);
+                        createVertices(380, 119, 120, 200, 1, 0);
+                        createVertices(260, 60, 120, 100, 2, 200);
+                        createVertices(140, 35, 120, 50, 4, 100);
+                        createVertices(20, 25, 120, 25, 8, 50);
                         for (BracketNode n : nodes) {
                                 n.setOnMouseClicked(clicked);
                                 n.setOnMouseEntered(enter);
