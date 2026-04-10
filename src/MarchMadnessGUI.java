@@ -14,21 +14,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -51,6 +39,8 @@ public class MarchMadnessGUI extends Application {
     private Button login;
     private Button scoreBoardButton;
     private Button viewBracketButton;
+    // DANIELLE: add help button
+    private Button helpButton;
     private Button clearButton;
     private Button resetButton;
     private Button finalizeButton;
@@ -69,7 +59,8 @@ public class MarchMadnessGUI extends Application {
     private ArrayList<Bracket> playerBrackets;
     private HashMap<String, Bracket> playerMap;
 
-    
+    // DANIELLE: for help button
+    private Stage helpStage;
 
     private ScoreBoardTable scoreBoard;
     private TableView table;
@@ -186,6 +177,49 @@ public class MarchMadnessGUI extends Application {
        full.setDisable(true);
        displayPane(new ScrollPane(full)); 
     }
+
+    // DANIELLE: help button functionality
+    /**
+     * Displays a popup containing instructions
+     * on how to use the program. The popup allows users to continue
+     * to interact with the rest of the program while viewing the popup.
+     */
+    private void help() {
+        Stage helpStage = new Stage();
+
+        Text helpText = new Text("To access your bracket, login to your account" +
+                " with your username and password. " +
+                "If you do not have an account, enter your desired username and password" +
+                " (your username must not match any existing account's username)" +
+                " and an account will be created for you.\n\n" +
+                "After logging in, you can choose a division to view," +
+                " or you can view the full bracket containing all divisions." +
+                " To change your choice, click on the desired school name." +
+                " To clear your choices on a particular bracket, use the 'Clear'" +
+                " button on the bottom bar. To clear all of your choices on every bracket," +
+                " use the 'Reset' button on the bottom bar. To choose a different division to view," +
+                " use the 'Choose Division' button on the bottom bar.\n\n" +
+                "When you are ready to finalize your choices, click the 'Finalize' button on the bottom bar." +
+                " You will not be able to change your bracket choices after finalizing." +
+                " After finalizing your choices, click the 'Simulate' button on the top bar" +
+                " to simulate the tournament. You can now use the 'ScoreBoard' and 'View Simulated Bracket'" +
+                " buttons on the top bar to view user scores and the bracket" +
+                " simulated tournament respectively.");
+
+        // Wrap text
+        helpText.wrappingWidthProperty().bind(helpStage.widthProperty().subtract(40));
+
+        StackPane helpRoot = new StackPane();
+
+        // Add margins
+        helpRoot.setPadding(new Insets(20));
+        helpRoot.getChildren().add(helpText);
+
+        Scene helpScene = new Scene(helpRoot, 500, 300);
+        helpStage.setTitle("Instructions");
+        helpStage.setScene(helpScene);
+        helpStage.show();
+    }
     
     /**
      * allows user to choose bracket
@@ -269,6 +303,8 @@ public class MarchMadnessGUI extends Application {
         simulate=new Button("Simulate");
         scoreBoardButton=new Button("ScoreBoard");
         viewBracketButton= new Button("View Simulated Bracket");
+        // DANIELLE: add help button
+        helpButton = new Button("Help");
         clearButton=new Button("Clear");
         resetButton=new Button("Reset");
         finalizeButton=new Button("Finalize");
@@ -278,6 +314,7 @@ public class MarchMadnessGUI extends Application {
                 simulate,
                 scoreBoardButton,
                 viewBracketButton,
+                helpButton,
                 createSpacer()
         );
         btoolBar.getItems().addAll(
@@ -298,6 +335,8 @@ public class MarchMadnessGUI extends Application {
         simulate.setOnAction(e->simulate());
         scoreBoardButton.setOnAction(e->scoreBoard());
         viewBracketButton.setOnAction(e->viewBracket());
+        // DANIELLE: the help button is available at all times for user to read
+        helpButton.setOnAction(e->help());
         clearButton.setOnAction(e->clear());
         resetButton.setOnAction(e->reset());
         finalizeButton.setOnAction(e->finalizeBracket());
@@ -527,5 +566,4 @@ public class MarchMadnessGUI extends Application {
         }
         return list;
     }
-       
 }
