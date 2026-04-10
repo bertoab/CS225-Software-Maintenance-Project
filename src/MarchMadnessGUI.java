@@ -203,11 +203,16 @@ public class MarchMadnessGUI extends Application {
      * for final4 reset Ro2 and winner
      */
     private void clear(){
-      
+      if (bracketPane.getDisplayedSubtree() == 7) {
+        selectedBracket = new Bracket(TournamentInfo.getEmptyBracket());
+        bracketPane = new BracketPane(selectedBracket);
+        displayPane(bracketPane);
+      } else {
       
       bracketPane.clear();
       bracketPane=new BracketPane(selectedBracket);
       displayPane(bracketPane);
+    }
         
     }
     

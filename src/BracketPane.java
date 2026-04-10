@@ -259,6 +259,12 @@ public class BracketPane extends BorderPane {
                 currentBracket = target;
         }
 
+        public int getDisplayedSubtree() {
+                return displayedSubtree;
+        }
+
+        
+
         /**
          * Clears the sub tree from,
          *
