@@ -300,11 +300,25 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     }
 
     /**
-     * Compares a given Bracket object to another.
-     * @param bracket the object to compare with.
+     * Compares a given object to this.
+     * @param obj the object to compare with.
      * @return whether the objects are the same.
      */
-    public boolean equals(Bracket bracket) {
+    @Override
+    public boolean equals(Object obj) {
+        // Check if objects are the same in memory
+        if(this == obj) {
+            return true;
+        }
+
+        // Check if obj is null or is a Bracket
+        if(obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        // Cast obj to a Bracket and compare fields
+        Bracket bracket = (Bracket) obj;
+
         return this.getBracket().equals(bracket.getBracket())
                 && this.getPlayerName().equals(bracket.getPlayerName())
                 && this.getPassword().equals(bracket.getPassword());

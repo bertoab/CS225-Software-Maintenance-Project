@@ -136,20 +136,31 @@ public class Team{
   }
 
   /**
-   * Compares a given Team object to another.
-   * @param team the object to compare with.
+   * Compares a given object to this.
+   * @param obj the object to compare with.
    * @return whether the objects are the same.
    */
-  public boolean equals(Team team) {
-    if(this.name.equals(team.getName())
-      && this.nickname.equals(team.getNickname())
-      && this.info.equals(team.getInfo())
-      && this.ranking == team.getRanking()
-      && this.offensePPG == team.getOffensePPG()
-      && this.defensePPG == team.getDefensePPG()) {
-        return true;
+  @Override
+  public boolean equals(Object obj) {
+    // Check if objects are the same in memory
+    if(this == obj) {
+      return true;
     }
-    return false;
+
+    // Check if obj is null or is a Team
+    if(obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+
+    // Cast obj to a Team and compare fields
+    Team team = (Team) obj;
+
+    return this.name.equals(team.getName())
+            && this.nickname.equals(team.getNickname())
+            && this.info.equals(team.getInfo())
+            && this.ranking == team.getRanking()
+            && this.offensePPG == team.getOffensePPG()
+            && this.defensePPG == team.getDefensePPG();
   }
 
 }

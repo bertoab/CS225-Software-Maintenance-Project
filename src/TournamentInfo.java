@@ -165,11 +165,24 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
     }
 
     /**
-     * Compares a given TournamentInfo object to another.
-     * @param tournamentInfo the object to compare with.
+     * Compares a given object to this.
+     * @param obj the object to compare with.
      * @return whether the objects are the same.
      */
-    public boolean equals(TournamentInfo tournamentInfo) {
+    @Override
+    public boolean equals(Object obj) {
+        // Check if objects are the same in memory
+        if(this == obj) {
+            return true;
+        }
+
+        // Check if obj is null or is a TournamentInfo
+        if(obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        // Cast obj to a TournamentInfo and compare teams HashMap
+        TournamentInfo tournamentInfo = (TournamentInfo) obj;
         return this.toString().equals(tournamentInfo.toString());
     }
 
