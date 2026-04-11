@@ -40,8 +40,12 @@ public class ScoreBoardPane{
     public static final String Column1MapKey = "PlayerName";
     public static final String Column2MapKey = "Player Score";
 
+    // DANIELLE: default constructor
 
-
+    /**
+     * Default class constructor.
+     */
+    public ScoreBoardPane() {}
     
 
    

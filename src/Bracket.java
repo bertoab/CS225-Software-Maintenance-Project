@@ -20,6 +20,13 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     public static final long serialVersionUID = 5609181678399742983L;
 
     //Constructor
+    // DANIELLE: default constructor
+
+    /**
+     * Default class constructor.
+     */
+    public Bracket() {}
+
     /**
      *Cosntructor using an ArrayList of strings to start
      * @param starting, and arraylist containing the 64 teams participating in the tournament
@@ -290,6 +297,7 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
 
     }
 
+    // DANIELLE: toString() and equals() override
     /**
      * Represents the Bracket object as a String.
      * @return the object's String representation.

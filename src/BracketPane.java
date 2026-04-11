@@ -147,6 +147,11 @@ public class BracketPane extends BorderPane {
         private GridPane center;
         private GridPane fullPane;
 
+        // DANIELLE: default constructor
+        /**
+         * Default class constructor.
+         */
+        public BracketPane() {}
 
         /**
          * TODO: Reduce. reuse, recycle!

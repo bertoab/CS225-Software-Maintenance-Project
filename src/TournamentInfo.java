@@ -154,7 +154,7 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
         return new Bracket(emptyBracket);
     }
 
-    // DANIELLE: complete classes
+    // DANIELLE: toString() and equals() override
     /**
      * Represents the TournamentInfo object as a String.
      * @return the object's String representation.

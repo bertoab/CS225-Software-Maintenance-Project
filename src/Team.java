@@ -14,7 +14,13 @@ public class Team{
   private int ranking;
   public double offensePPG;
   public double defensePPG;
-  
+
+  // DANIELLE: default constructor
+  /**
+   * Default class constructor.
+   */
+  public Team() {}
+
   /**
    * Constructor
    * @param name 
@@ -123,7 +129,7 @@ public class Team{
 	  offensePPG =  newOffense;
   }
 
-  // DANIELLE: complete class
+  // DANIELLE: toString() and equals() override
   /**
    * Represents the object as a String.
    * @return the object's String representation.
