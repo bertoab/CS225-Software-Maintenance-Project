@@ -336,9 +336,9 @@ public class BracketPane extends BorderPane {
                 BracketNode nodeFinal0 = new BracketNode("", 162, 300, 70, 0);
                 BracketNode nodeFinal1 = new BracketNode("", 75, 400, 70, 0);
                 BracketNode nodeFinal2 = new BracketNode("", 250, 400, 70, 0);
-                nodeFinal0.setName(currentBracket.getBracket().get(0));
-                nodeFinal1.setName(currentBracket.getBracket().get(1));
-                nodeFinal2.setName(currentBracket.getBracket().get(2));
+                nodeFinal0.setName(currentBracket.getBracket().get(0), currentBracket.getCorrect(0));
+                nodeFinal1.setName(currentBracket.getBracket().get(1), currentBracket.getCorrect(1));
+                nodeFinal2.setName(currentBracket.getBracket().get(2), currentBracket.getCorrect(2));
                 finalPane.getChildren().add(nodeFinal0);
                 finalPane.getChildren().add(nodeFinal1);
                 finalPane.getChildren().add(nodeFinal2);
@@ -415,7 +415,7 @@ public class BracketPane extends BorderPane {
                                 BracketNode last = new BracketNode("", iX, y - 20, iXO, 20);
                                 nodes.add(last);
                                 getChildren().addAll(new Line(iX, iY, iX + iXO, iY), last);
-                                last.setName(currentBracket.getBracket().get(location));
+                                last.setName(currentBracket.getBracket().get(location), currentBracket.getCorrect(location));
                                 bracketMap.put(last, location);
                                 nodeMap.put(location, last);
                         } else {
@@ -448,7 +448,10 @@ public class BracketPane extends BorderPane {
                                 ArrayList<Integer> tmpHelp = helper(location, num);
                                 for (int j = 0; j < aNodeList.size(); j++) {
                                         //System.out.println(currentBracket.getBracket().get(tmpHelp.get(j)));
-                                        aNodeList.get(j).setName(currentBracket.getBracket().get(tmpHelp.get(j)));
+                                        if(tmpHelp.get(j) < 63 && tmpHelp.get(j) >= 0)
+                                                aNodeList.get(j).setName(currentBracket.getBracket().get(tmpHelp.get(j)),currentBracket.getCorrect(tmpHelp.get(j)));
+                                        else
+                                                aNodeList.get(j).setName(currentBracket.getBracket().get(tmpHelp.get(j)));
                                         bracketMap.put(aNodeList.get(j), tmpHelp.get(j));
                                         nodeMap.put(tmpHelp.get(j), aNodeList.get(j));
                                         //System.out.println(bracketMap.get(aNodeList.get(j)));
@@ -485,7 +488,7 @@ public class BracketPane extends BorderPane {
                         name = new Label(teamName);
 
                         //New - Joey
-                        name.setStyle("-fx-text-fill: #e8e2d4; -fx-font-family: Arial; -fx-font-size: 12px;");
+                        name.setStyle("-fx-text-fill: #d4e8d9; -fx-font-family: Arial; -fx-font-size: 12px;");
                         // setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
                         name.setTranslateX(5);
                         getChildren().addAll(name, rect);
@@ -501,9 +504,17 @@ public class BracketPane extends BorderPane {
                 /**
                  * @param teamName The name to assign to the node.
                  */
-                public void setName(String teamName) {
+                public void setName(String teamName, boolean correct) {
                         this.teamName = teamName;
                         name.setText(teamName);
+                        
+                        if(correct)
+                                name.setStyle("-fx-text-fill: #38d72a;");
+                }
+
+                public void setName(String teamName)
+                {
+                        setName(teamName,false);
                 }
         }
 }

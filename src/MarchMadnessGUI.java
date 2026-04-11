@@ -54,6 +54,9 @@ public class MarchMadnessGUI extends Application {
     private Button resetButton;
     private Button finalizeButton;
 
+    // Matthew Tummino: button purely for testing, will remove later
+    private Button testButton;
+
     //NEW - Joey
     private Button realResultsButton;
     
@@ -250,6 +253,24 @@ public class MarchMadnessGUI extends Application {
         helpStage.show();
     }
     
+    //Matthew Tummino
+    //A test method, at the moment it selects the first available player bracket and highlights their correct
+    //predictions on the sim bracket
+    private void test()
+    {
+        simResultBracket.matchCorrect(playerBrackets.get(0).getCorrectArray());
+        selectedBracket=simResultBracket;
+
+        //An alternate approach, shows the player's bracket instead of the sim bracket
+        //selectedBracket=playerBrackets.get(0);
+
+        bracketPane=new BracketPane(selectedBracket);
+        GridPane full = bracketPane.getFullPane();
+        full.setAlignment(Pos.CENTER);
+        full.setDisable(true);
+        displayPane(new ScrollPane(full)); 
+    }
+
     /**
      * allows user to choose bracket
      * 
@@ -335,6 +356,9 @@ public class MarchMadnessGUI extends Application {
         viewBracketButton= new Button("View Simulated Bracket");
         // DANIELLE: add help button
         helpButton = new Button("Help");
+        
+        testButton = new Button("Test");
+
         clearButton=new Button("Clear");
         resetButton=new Button("Reset");
         finalizeButton=new Button("Finalize");
@@ -367,6 +391,7 @@ public class MarchMadnessGUI extends Application {
                 scoreBoardButton,
                 viewBracketButton,
                 helpButton,
+                testButton,
                 createSpacer()
         );
         btoolBar.getItems().addAll(
@@ -402,6 +427,9 @@ public class MarchMadnessGUI extends Application {
         viewBracketButton.setOnAction(e->viewBracket());
         // DANIELLE: the help button is available at all times for user to read
         helpButton.setOnAction(e->help());
+
+        testButton.setOnAction(e->test());
+
         clearButton.setOnAction(e->clear());
         resetButton.setOnAction(e->reset());
         finalizeButton.setOnAction(e->finalizeBracket());

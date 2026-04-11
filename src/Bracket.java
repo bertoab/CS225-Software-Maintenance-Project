@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.io.Serializable; 
 
 /**
@@ -20,6 +21,10 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     static final int SOUTH_BRACKET = 6;
     public static final long serialVersionUID = 1L;
 
+    // Matthew Tummin: used to mark correct game predictions
+    private Boolean[] correct = new Boolean[63];
+    
+
     //Constructor
     /**
      *Cosntructor using an ArrayList of strings to start
@@ -30,6 +35,7 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         while(bracket.size()<127){
             bracket.add(0,"");
         }
+        Arrays.fill(correct,false);
     }
 
     /**
@@ -43,6 +49,7 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         }*/
         //code above removed and replaced by matt 5/1
         bracket = new ArrayList<String>(starting.getBracket());
+        Arrays.fill(correct,false);
     }
 
     /**
@@ -54,6 +61,7 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     public Bracket(Bracket starting, String user){
         bracket = new ArrayList<String>(starting.getBracket());
         playerName = user;
+        Arrays.fill(correct,false);
     }
 
     //Methods
@@ -212,15 +220,16 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
 
         //Adjustment by Matthew Tummino
         //Accounts for the box score being added to the winner names in the bracket
+        //Also marks any correctl guessed games
         for(int i = 0; i < 63; i++)
         {
             String masterString = master.getBracket().get(i);
             int stopIndex = masterString.indexOf("[");
             if (stopIndex != -1)
                 masterString = masterString.substring(0, stopIndex-1);
-            System.out.println(masterString);
             if (bracket.get(i).equals(masterString))
             {
+                correct[i] = true;
                 if(i == 0)
                     score+=32;
                 else if( i >= 1 && i < 3)
@@ -344,6 +353,30 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
             bracket.set(i, bracket.get(i) + " [" + teamScores[index1] + "-" + teamScores[index2] +"]");
         }
 
+    }
+
+    /**
+     * @author Matthew Tummino
+     * Returns whether the team predicted for game at position i in the bracket was correct
+     * @param i the position in the bracket
+     * @return true if the game was pedicted correctly
+     */
+    public boolean getCorrect(int i)
+    {
+        return correct[i];
+    }
+
+    public Boolean[] getCorrectArray()
+    {
+        return correct;
+    }
+
+    public void matchCorrect(Boolean[] match)
+    {
+        for(int i = 0; i < correct.length; i++)
+        {
+            correct[i] = match[i];
+        }
     }
 }
 
