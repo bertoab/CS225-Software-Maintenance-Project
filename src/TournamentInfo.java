@@ -153,4 +153,24 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
     public static Bracket getEmptyBracket() {
         return new Bracket(emptyBracket);
     }
+
+    // DANIELLE: complete classes
+    /**
+     * Represents the TournamentInfo object as a String.
+     * @return the object's String representation.
+     */
+    @Override
+    public String toString() {
+        return teams.toString();
+    }
+
+    /**
+     * Compares a given TournamentInfo object to another.
+     * @param tournamentInfo the object to compare with.
+     * @return whether the objects are the same.
+     */
+    public boolean equals(TournamentInfo tournamentInfo) {
+        return this.toString().equals(tournamentInfo.toString());
+    }
+
 }

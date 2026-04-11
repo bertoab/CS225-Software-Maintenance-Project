@@ -122,4 +122,34 @@ public class Team{
   public void setOffense(double newOffense){
 	  offensePPG =  newOffense;
   }
+
+  // DANIELLE: complete class
+  /**
+   * Represents the object as a String.
+   * @return the object's String representation.
+   */
+  @Override
+  public String toString() {
+    String representation = this.name + ", " + this.nickname + ", " + this.info + ", " +
+            this.ranking + ", " + this.offensePPG + ", " + this.defensePPG;
+    return representation;
+  }
+
+  /**
+   * Compares a given Team object to another.
+   * @param team the object to compare with.
+   * @return whether the objects are the same.
+   */
+  public boolean equals(Team team) {
+    if(this.name.equals(team.getName())
+      && this.nickname.equals(team.getNickname())
+      && this.info.equals(team.getInfo())
+      && this.ranking == team.getRanking()
+      && this.offensePPG == team.getOffensePPG()
+      && this.defensePPG == team.getDefensePPG()) {
+        return true;
+    }
+    return false;
+  }
+
 }

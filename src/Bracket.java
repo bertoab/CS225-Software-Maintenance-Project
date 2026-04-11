@@ -289,5 +289,26 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         }
 
     }
+
+    /**
+     * Represents the Bracket object as a String.
+     * @return the object's String representation.
+     */
+    @Override
+    public String toString() {
+        return playerName + ", " + bracket.toString();
+    }
+
+    /**
+     * Compares a given Bracket object to another.
+     * @param bracket the object to compare with.
+     * @return whether the objects are the same.
+     */
+    public boolean equals(Bracket bracket) {
+        return this.getBracket().equals(bracket.getBracket())
+                && this.getPlayerName().equals(bracket.getPlayerName())
+                && this.getPassword().equals(bracket.getPassword());
+    }
+
 }
 
