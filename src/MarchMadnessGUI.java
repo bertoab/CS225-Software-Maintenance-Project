@@ -403,7 +403,7 @@ public class MarchMadnessGUI extends Application {
                 scoreBoardButton,
                 viewBracketButton,
                 helpButton,
-                testButton,
+                cycleButton,
                 createSpacer()
         );
         btoolBar.getItems().addAll(
@@ -426,6 +426,8 @@ public class MarchMadnessGUI extends Application {
         resetButton.setStyle(mutedBtn);
         back.setStyle(mutedBtn);
         realResultsButton.setStyle(mutedBtn);
+        cycleButton.setStyle(mutedBtn);
+        helpButton.setStyle(mutedBtn);
 
     }
     
