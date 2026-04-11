@@ -237,7 +237,8 @@ public class MarchMadnessGUI extends Application {
                 " simulated tournament respectively. In the simulated bracket, correct predictions are marked" +
                 " in green while incorrect predictions are marked in red. You will receive points for making" +
                 " correct predictions. You can view the scoreboard to see the points you and other accounts" +
-                " have obtained.");
+                " have obtained. You can also use the '2017 Real Results' button on the top bar to view the results" +
+                " of the real-life 2017 March Madness tournament.");
 
         // Wrap text
         helpText.wrappingWidthProperty().bind(helpStage.widthProperty().subtract(40));
@@ -248,7 +249,7 @@ public class MarchMadnessGUI extends Application {
         helpRoot.setPadding(new Insets(20));
         helpRoot.getChildren().add(helpText);
 
-        Scene helpScene = new Scene(helpRoot, 500, 330);
+        Scene helpScene = new Scene(helpRoot, 500, 360);
         helpStage.setTitle("Instructions");
         helpStage.setScene(helpScene);
         helpStage.show();
