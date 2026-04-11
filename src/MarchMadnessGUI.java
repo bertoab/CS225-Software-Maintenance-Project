@@ -54,6 +54,7 @@ public class MarchMadnessGUI extends Application {
     private Button clearButton;
     private Button resetButton;
     private Button finalizeButton;
+    private Button autoFillButton;
     
     //allows you to navigate back to division selection screen
     private Button back;
@@ -228,7 +229,13 @@ public class MarchMadnessGUI extends Application {
             displayPane(bracketPane);
         }
     }
-    
+
+    private void autoFill() {
+        TournamentInfo.autoFill(selectedBracket);
+        bracketPane = new BracketPane(selectedBracket);
+        displayPane(bracketPane);
+    }
+
     private void finalizeBracket(){
        if(bracketPane.isComplete()){
            btoolBar.setDisable(true);
@@ -277,6 +284,7 @@ public class MarchMadnessGUI extends Application {
         clearButton=new Button("Clear");
         resetButton=new Button("Reset");
         finalizeButton=new Button("Finalize");
+        autoFillButton=new Button("Auto Fill");
         toolBar.getItems().addAll(
                 createSpacer(),
                 login,
@@ -290,6 +298,7 @@ public class MarchMadnessGUI extends Application {
                 clearButton,
                 resetButton,
                 finalizeButton,
+                autoFillButton,
                 back=new Button("Choose Division"),
                 createSpacer()
         );
@@ -306,6 +315,7 @@ public class MarchMadnessGUI extends Application {
         clearButton.setOnAction(e->clear());
         resetButton.setOnAction(e->reset());
         finalizeButton.setOnAction(e->finalizeBracket());
+        autoFillButton.setOnAction(e->autoFill());
         back.setOnAction(e->{
             bracketPane=new BracketPane(selectedBracket);
             displayPane(bracketPane);

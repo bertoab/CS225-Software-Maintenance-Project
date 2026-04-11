@@ -153,4 +153,33 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
     public static Bracket getEmptyBracket() {
         return new Bracket(emptyBracket);
     }
+
+    public static void autoFill(Bracket bracket) {
+        for (int i = 62; i >= 0; i--) {
+            if (!bracket.getBracket().get(i).isEmpty()) continue;
+
+            int index1 = 2 * i + 1;
+            int index2 = 2 * i + 2;
+
+            String team1 = bracket.getBracket().get(index1);
+            String team2 = bracket.getBracket().get(index2);
+
+            if (team1.isEmpty() || team2.isEmpty()) continue;
+
+            Team t1 = teams.get(team1);
+            Team t2 = teams.get(team2);
+            
+            if (team1 == null || team2 == null) continue;
+
+            int score1 = 0, score2 = 0;
+            while (score1 == score2) {
+                score1 = (int) (((Math.random() * 136) + 75) * (1 - (t1.getRanking() * 0.02)));
+                score2 = (int) (((Math.random() * 136) + 75) * (1 - (t2.getRanking() * 0.02)));
+            }
+            if (score1 > score2) 
+                bracket.moveTeamUp(index1);
+            else
+                bracket.moveTeamUp(index2);
+        }
+    }
 }
