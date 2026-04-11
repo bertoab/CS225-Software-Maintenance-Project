@@ -14,7 +14,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-// import java.util.Objects;
+import java.util.Objects;
 import java.util.Scanner;
 
 import javafx.application.Application;
@@ -64,8 +64,8 @@ public class MarchMadnessGUI extends Application {
     private Bracket simResultBracket;
 
     
+    // Gabe change: this list now tracks only current-session participants
     private ArrayList<Bracket> playerBrackets;
-    private HashMap<String, Bracket> playerMap;
 
     //LIOR: added attributes for new password system
     private HashMap<String, byte[]> passwordHashes;
@@ -94,11 +94,8 @@ public class MarchMadnessGUI extends Application {
         } catch (IOException ex) {
             showError(new Exception("Can't find "+ex.getMessage(),ex),true);
         }
-        //deserialize stored brackets
-        playerBrackets = loadBrackets();
-        
-        playerMap = new HashMap<>();
-        addAllToMap();
+        // Gabe change: do not preload saved brackets at startup
+        playerBrackets = new ArrayList<Bracket>();
         
 
 
@@ -267,6 +264,12 @@ public class MarchMadnessGUI extends Application {
             //horrible hack to reset
             //LIOR: changed this to work with reworked TournamentInfo
             selectedBracket=new Bracket(TournamentInfo.getEmptyBracket());
+            // Gabe change: preserve the current account identity on reset
+            selectedBracket.setPlayerName(currentUserLoggedIn);
+            // Gabe change: keep the session participant list pointed at the current bracket object
+            if (findSessionBracket(currentUserLoggedIn) != null) {
+                addSessionParticipant(selectedBracket);
+            }
             bracketPane=new BracketPane(selectedBracket);
             displayPane(bracketPane);
         }
@@ -276,11 +279,17 @@ public class MarchMadnessGUI extends Application {
        if(bracketPane.isComplete()){
            btoolBar.setDisable(true);
            bracketPane.setDisable(true);
-           simulate.setDisable(false);
-           login.setDisable(false);
            //save the bracket along with account info
            selectedBracket.setPlayerName(currentUserLoggedIn);
-           serializeBracket(selectedBracket);
+           // Gabe change: only add a bracket to the session after a successful save
+           if (serializeBracket(selectedBracket)) {
+               addSessionParticipant(selectedBracket);
+               simulate.setDisable(false);
+               login.setDisable(false);
+           } else {
+               btoolBar.setDisable(false);
+               bracketPane.setDisable(false);
+           }
             
        }else{
             infoAlert("You can only finalize a bracket once it has been completed.");
@@ -424,21 +433,40 @@ public class MarchMadnessGUI extends Application {
             catch(NoSuchAlgorithmException e) {
                 showError(e, false);
             }
-           
+            // Gabe change: stop login if the entered password could not be hashed
+            if (playerPassHash == null) {
+                return;
+            }
 
             if (passwordHashes.containsKey(name)) {
                 //check password of user
-                
-                // Bracket tmpBracket = this.playerMap.get(name);
-               
                 byte[] passwordHash = passwordHashes.get(name);
 
                 if (Arrays.equals(passwordHash, playerPassHash)) {
-                    // load bracket
-
-                    //LIOR: check for if an account has been made but a bracket was never saved   
-                    System.out.println(playerMap.containsKey(name));       
-                    selectedBracket = (playerMap.containsKey(name)) ? playerMap.get(name) : TournamentInfo.getEmptyBracket();
+                    // Gabe change: reuse the session bracket if this user already joined this run
+                    Bracket sessionBracket = findSessionBracket(name);
+                    if (sessionBracket != null) {
+                        selectedBracket = sessionBracket;
+                    } else {
+                        // Gabe change: only deserialize the saved bracket for the user who just logged in
+                        File savedBracketFile = findSavedBracketFile(name);
+                        if (savedBracketFile != null) {
+                            selectedBracket = deserializeBracket(savedBracketFile.getName());
+                            if (selectedBracket == null) {
+                                return;
+                            }
+                            if (selectedBracket.getPlayerName() != null
+                                    && !selectedBracket.getPlayerName().equals("")
+                                    && !Objects.equals(selectedBracket.getPlayerName(), name)) {
+                                showError(new Exception("Error loading bracket \nSaved bracket does not match requested user \"" + name + "\"."), false);
+                                return;
+                            }
+                        } else {
+                            selectedBracket = TournamentInfo.getEmptyBracket();
+                        }
+                        selectedBracket.setPlayerName(name);
+                        addSessionParticipant(selectedBracket);
+                    }
                     currentUserLoggedIn = name;
                     chooseBracket();
                 }else{
@@ -452,12 +480,6 @@ public class MarchMadnessGUI extends Application {
                     //LIOR: changed this to work with reworked TournamentInfo
                     Bracket tmpPlayerBracket = TournamentInfo.getEmptyBracket();
                     tmpPlayerBracket.setPlayerName(name);
-
-                    playerBrackets.add(tmpPlayerBracket);
-                    // tmpPlayerBracket.setPassword(playerPass);
-                    
-
-                    playerMap.put(name, tmpPlayerBracket);
                     selectedBracket = tmpPlayerBracket;
                     //alert user that an account has been created
                     infoAlert("No user with the Username \""  + name + "\" exists. A new account has been created.");
@@ -479,15 +501,56 @@ public class MarchMadnessGUI extends Application {
     }
     
     /**
-     * addAllToMap
-     * adds all the brackets to the map for login
+     * Finds an already loaded participant for the current session.
      */
-    private void addAllToMap(){
-        for(Bracket b:playerBrackets){
-            playerMap.put(b.getPlayerName(), b);   
+    // Gabe change: helper for session-only participant tracking
+    private Bracket findSessionBracket(String playerName){
+        for(Bracket bracket : playerBrackets){
+            if(Objects.equals(bracket.getPlayerName(), playerName)){
+                return bracket;
+            }
         }
+        return null;
     }
     
+    /**
+     * Finds the saved bracket file for a user without loading every .ser file.
+     */
+    // Gabe change: helper for on-demand saved-bracket lookup
+    private File findSavedBracketFile(String playerName){
+        File dir = new File(".");
+        File[] files = dir.listFiles();
+        if (files == null) {
+            return null;
+        }
+
+        String targetFileName = playerName + ".ser";
+        for (File fileEntry : files) {
+            if (fileEntry.isFile() && fileEntry.getName().equals(targetFileName)) {
+                return fileEntry;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Adds or updates a participant in the current session list.
+     */
+    // Gabe change: helper to keep playerBrackets limited to active session participants
+    private void addSessionParticipant(Bracket bracket){
+        if (bracket == null || bracket.getPlayerName() == null || bracket.getPlayerName().equals("")) {
+            return;
+        }
+
+        for (int i = 0; i < playerBrackets.size(); i++) {
+            if (Objects.equals(playerBrackets.get(i).getPlayerName(), bracket.getPlayerName())) {
+                playerBrackets.set(i, bracket);
+                return;
+            }
+        }
+        playerBrackets.add(bracket);
+    }
+
     /**
      * The Exception handler
      * Displays a error message to the user
@@ -544,19 +607,21 @@ public class MarchMadnessGUI extends Application {
      * seralizedBracket
      * @param B The bracket the is going to be seralized
      */
-    private static void serializeBracket(Bracket B) {
+    // Gabe change: return save success so finalize can decide whether to add the bracket to the session
+    private static boolean serializeBracket(Bracket B) {
+        if (B == null || B.getPlayerName() == null || B.getPlayerName().equals("")) {
+            showError(new Exception("Error saving bracket \nMissing player name."), false);
+            return false;
+        }
 
-        FileOutputStream outStream = null;
-        ObjectOutputStream out = null;
-
-        try {
-            outStream = new FileOutputStream(B.getPlayerName() + ".ser");
-            out = new ObjectOutputStream(outStream);
+        try (FileOutputStream outStream = new FileOutputStream(B.getPlayerName() + ".ser");
+             ObjectOutputStream out = new ObjectOutputStream(outStream)) {
             out.writeObject(B);
-            out.close();
+            return true;
         } catch (IOException e) {
             // Grant osborn 5/6 hopefully this never happens
             showError(new Exception("Error saving bracket \n" + e.getMessage(), e), false);
+            return false;
         }
     }
 
@@ -589,34 +654,10 @@ public class MarchMadnessGUI extends Application {
             alert.showAndWait();
 
             // `bracket` will be `null` when this method returns
-            // the `loadBrackets` method will filter out this value
         }
 
     } 
     return bracket;
-    }
-    
-      /**
-     * Tayon Watson 5/5
-     * deseralizedBracket
-     * @return deserialized bracket
-     */
-    private static ArrayList<Bracket> loadBrackets()
-    {   
-        ArrayList<Bracket> list=new ArrayList<Bracket>();
-        File dir = new File(".");
-        for (final File fileEntry : dir.listFiles()){
-            String fileName = fileEntry.getName();
-            String extension = fileName.substring(fileName.lastIndexOf(".")+1);
-       
-            if (extension.equals("ser")){
-                // ROBERTO
-                Bracket bracket = deserializeBracket(fileName); // returns `null` for outdated brackets
-                if (bracket instanceof Bracket) // don't add outdated brackets
-                    list.add(bracket);
-            }
-        }
-        return list;
     }
     
     //LIOR: utility method for password checking and storing
