@@ -388,7 +388,7 @@ public class MarchMadnessGUI extends Application {
         loginPane.setVgap(10);
         loginPane.setPadding(new Insets(5, 5, 5, 5));
 
-        Text welcomeMessage = new Text("March Madness a Welcome");
+        Text welcomeMessage = new Text("March Madness Login Welcome");
         loginPane.add(welcomeMessage, 0, 0, 2, 1);
 
         Label userName = new Label("User Name: ");
