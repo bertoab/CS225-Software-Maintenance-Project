@@ -6,12 +6,13 @@ import java.io.IOException;
 public class BackendTest {
     public static void main(String[]args){
         try {
-            TournamentInfo info = new TournamentInfo();
-            System.out.println(info.getTeam("Villanova").getRanking());
-            Bracket starting = new Bracket(info.loadStartingBracket());
+            //LIOR: changed this to work with the reworked TournamentInfo
+            TournamentInfo.loadEmptyBracket();
+            System.out.println(TournamentInfo.getTeam("Villanova").getRanking());
+            Bracket starting = new Bracket(TournamentInfo.getEmptyBracket());
             //System.out.println(starting.getBracket().get(125));
             //starting.moveTeamUp(125);
-            info.simulate(starting);
+            starting.simulate();
 
 
             System.out.println(starting.getBracket().get(0));

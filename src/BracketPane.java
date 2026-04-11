@@ -19,7 +19,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-import java.io.IOException;
+// import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -105,11 +105,12 @@ public class BracketPane extends BorderPane {
                         int treeNum = bracketMap.get(n);
                         String teamName = currentBracket.getBracket().get(treeNum);
                         try {
-                                TournamentInfo info = new TournamentInfo();
-                                Team t = info.getTeam(teamName);
+                                //LIOR: changed to work with reworked TournamentInfo
+                                Team t = TournamentInfo.getTeam(teamName);
                                 //by Tyler - added the last two pieces of info to the pop up window
                                 text += "Team: " + teamName + " | Ranking: " + t.getRanking() + "\nMascot: " + t.getNickname() + "\nInfo: " + t.getInfo() + "\nAverage Offensive PPG: " + t.getOffensePPG() + "\nAverage Defensive PPG: "+ t.getDefensePPG();
-                        } catch (IOException e) {//if for some reason TournamentInfo isnt working, it will display info not found
+                        } catch (Exception e) {//if for some reason TournamentInfo isnt working, it will display info not found
+                                //LIOR: changed IOException to Exception
                                 text += "Info for " + teamName + "not found";
                         }
                         //create a popup with the team info
@@ -175,7 +176,8 @@ public class BracketPane extends BorderPane {
                 buttons.add(customButton("SOUTH"));
                 buttons.add(customButton("FULL"));
 
-                ArrayList<GridPane> gridPanes = new ArrayList<>();
+                //LIOR: commented this out because it's not doing anything
+                // ArrayList<GridPane> gridPanes = new ArrayList<>();
 
                 for (int m = 0; m < buttons.size() - 1; m++) {
                         roots.add(new Root(3 + m));
@@ -383,11 +385,18 @@ public class BracketPane extends BorderPane {
                         //New - Joey
                         this.setStyle("-fx-background-color: #231f20;");
 
-                        createVertices(420, 200, 100, 20, 0, 0);
-                        createVertices(320, 119, 100, 200, 1, 0);
-                        createVertices(220, 60, 100, 100, 2, 200);
-                        createVertices(120, 35, 100, 50, 4, 100);
-                        createVertices(20, 25, 100, 25, 8, 50);
+//                         createVertices(420, 200, 100, 20, 0, 0);
+//                         createVertices(320, 119, 100, 200, 1, 0);
+//                         createVertices(220, 60, 100, 100, 2, 200);
+//                         createVertices(120, 35, 100, 50, 4, 100);
+//                         createVertices(20, 25, 100, 25, 8, 50);
+                        //Matthew Tummino
+                        //Adjusted values to better fit school names
+                        createVertices(500, 200, 120, 20, 0, 0);
+                        createVertices(380, 119, 120, 200, 1, 0);
+                        createVertices(260, 60, 120, 100, 2, 200);
+                        createVertices(140, 35, 120, 50, 4, 100);
+                        createVertices(20, 25, 120, 25, 8, 50);
                         for (BracketNode n : nodes) {
                                 n.setOnMouseClicked(clicked);
                                 n.setOnMouseEntered(enter);
