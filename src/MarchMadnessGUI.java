@@ -2,13 +2,21 @@
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.InvalidClassException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Objects;
+// import java.util.Objects;
+import java.util.Scanner;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -59,6 +67,9 @@ public class MarchMadnessGUI extends Application {
     private ArrayList<Bracket> playerBrackets;
     private HashMap<String, Bracket> playerMap;
 
+    //LIOR: added attributes for new password system
+    private HashMap<String, byte[]> passwordHashes;
+    private String currentUserLoggedIn;
     // DANIELLE: for help button
     private Stage helpStage;
 
@@ -148,7 +159,10 @@ public class MarchMadnessGUI extends Application {
      * Displays the login screen
      * 
      */
-    private void login(){            
+    private void login(){        
+        //LIOR: add this statement to work with new password system
+        passwordHashes = loadPasswordHashes();
+
         login.setDisable(true);
         simulate.setDisable(true);
         scoreBoardButton.setDisable(true);
@@ -265,6 +279,7 @@ public class MarchMadnessGUI extends Application {
            simulate.setDisable(false);
            login.setDisable(false);
            //save the bracket along with account info
+           selectedBracket.setPlayerName(currentUserLoggedIn);
            serializeBracket(selectedBracket);
             
        }else{
@@ -395,26 +410,36 @@ public class MarchMadnessGUI extends Application {
         Label message = new Label();
         loginPane.add(message, 1, 5);
 
+        //LIOR: change this event to work with the new password system
         signButton.setOnAction(event -> {
 
             // the name user enter
             String name = enterUser.getText();
             // the password user enter
             String playerPass = passwordField.getText();
+            byte[] playerPassHash = null;
+            try {
+                 playerPassHash = stringToHash(playerPass);
+            }
+            catch(NoSuchAlgorithmException e) {
+                showError(e, false);
+            }
+           
 
-        
-          
-            
-            if (playerMap.get(name) != null) {
+            if (passwordHashes.containsKey(name)) {
                 //check password of user
-                 
-                Bracket tmpBracket = this.playerMap.get(name);
+                
+                // Bracket tmpBracket = this.playerMap.get(name);
                
-                String password1 = tmpBracket.getPassword();
+                byte[] passwordHash = passwordHashes.get(name);
 
-                if (Objects.equals(password1, playerPass)) {
+                if (Arrays.equals(passwordHash, playerPassHash)) {
                     // load bracket
-                    selectedBracket=playerMap.get(name);
+
+                    //LIOR: check for if an account has been made but a bracket was never saved   
+                    System.out.println(playerMap.containsKey(name));       
+                    selectedBracket = (playerMap.containsKey(name)) ? playerMap.get(name) : TournamentInfo.getEmptyBracket();
+                    currentUserLoggedIn = name;
                     chooseBracket();
                 }else{
                    infoAlert("The password you have entered is incorrect!");
@@ -427,13 +452,24 @@ public class MarchMadnessGUI extends Application {
                     //LIOR: changed this to work with reworked TournamentInfo
                     Bracket tmpPlayerBracket = TournamentInfo.getEmptyBracket();
                     tmpPlayerBracket.setPlayerName(name);
+
                     playerBrackets.add(tmpPlayerBracket);
-                    tmpPlayerBracket.setPassword(playerPass);
+                    // tmpPlayerBracket.setPassword(playerPass);
+                    
 
                     playerMap.put(name, tmpPlayerBracket);
                     selectedBracket = tmpPlayerBracket;
                     //alert user that an account has been created
                     infoAlert("No user with the Username \""  + name + "\" exists. A new account has been created.");
+                    
+                    try {
+                        appendLoginInfo(name, playerPassHash);
+                    }
+                    catch(IOException e) {
+                        showError(e, false);
+                    }
+
+                    currentUserLoggedIn = name;
                     chooseBracket();
                 }
             }
@@ -528,7 +564,8 @@ public class MarchMadnessGUI extends Application {
      * Tayon Watson 5/5
      * deseralizedBracket
      * @param filename of the seralized bracket file
-     * @return deserialized bracket 
+     * BELOW EDITED BY ROBERTO
+     * @return deserialized Bracket object, or `null` if the Bracket cannot be deserialized
      */
     private static Bracket deserializeBracket(String filename){
         Bracket bracket = null;
@@ -541,8 +578,20 @@ public class MarchMadnessGUI extends Application {
         bracket = (Bracket) in.readObject();
         in.close();
     }catch (IOException | ClassNotFoundException e) {
-      // Grant osborn 5/6 hopefully this never happens either
-      showError(new Exception("Error loading bracket \n"+e.getMessage(),e),false);
+        // ROBERTO
+        if (e instanceof InvalidClassException) { // bracket is outdated version (before hashed password)
+            // let the user know an outdated file is being skipped
+            String header = "Skipping incompatible bracket file";
+            String msg = String.format("\"%s\" is incompatible and cannot be read. The program will skip this file.", filename);
+            Alert alert = new Alert(AlertType.ERROR,msg);
+            alert.setTitle("Error");
+            alert.setHeaderText(header);
+            alert.showAndWait();
+
+            // `bracket` will be `null` when this method returns
+            // the `loadBrackets` method will filter out this value
+        }
+
     } 
     return bracket;
     }
@@ -561,9 +610,57 @@ public class MarchMadnessGUI extends Application {
             String extension = fileName.substring(fileName.lastIndexOf(".")+1);
        
             if (extension.equals("ser")){
-                list.add(deserializeBracket(fileName));
+                // ROBERTO
+                Bracket bracket = deserializeBracket(fileName); // returns `null` for outdated brackets
+                if (bracket instanceof Bracket) // don't add outdated brackets
+                    list.add(bracket);
             }
         }
         return list;
+    }
+    
+    //LIOR: utility method for password checking and storing
+    private static byte[] stringToHash(String input) throws NoSuchAlgorithmException {
+        return MessageDigest.getInstance("SHA-256").digest(input.getBytes());
+    }
+
+    //LIOR: load the hashes in from passwordHashes.txt
+    private HashMap<String, byte[]> loadPasswordHashes() {
+        Scanner scnr = null;
+
+        try {
+            scnr = new Scanner(new File("passwordHashes.txt"));
+        }
+        catch(FileNotFoundException e) {
+            showError(e, false);
+        }
+        
+        HashMap<String, byte[]> passwordHashMap = new HashMap<String, byte[]>();
+
+        while (scnr.hasNext()) {
+
+            String userName = scnr.nextLine().trim();
+            byte[] hash = new byte[32]; //SHA-256 algorithm always generates a 32 byte code
+            for (int i = 0; i < hash.length; ++i) {
+                hash[i] = scnr.nextByte();
+            }
+            scnr.nextLine();
+
+            passwordHashMap.put(userName, hash);
+        }
+
+         return passwordHashMap;
+    }
+
+    //LIOR: add set of login info to passwordHashes.txt
+    private void appendLoginInfo(String username, byte[] passwordHash) throws IOException {
+        FileWriter writer = new FileWriter("passwordHashes.txt", true);
+        writer.write(username + "\n");
+
+        for (byte b : passwordHash) {
+            writer.write((int)b + " ");
+        }
+        writer.write("\n");
+        writer.close();
     }
 }
