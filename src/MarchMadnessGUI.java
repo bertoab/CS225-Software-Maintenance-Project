@@ -14,6 +14,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Objects;
 // import java.util.Objects;
 import java.util.Scanner;
 
@@ -52,6 +53,9 @@ public class MarchMadnessGUI extends Application {
     private Button clearButton;
     private Button resetButton;
     private Button finalizeButton;
+
+    //NEW - Joey
+    private Button realResultsButton;
     
     //allows you to navigate back to division selection screen
     private Button back;
@@ -104,6 +108,7 @@ public class MarchMadnessGUI extends Application {
 
         //the main layout container
         root = new BorderPane();
+        root.setStyle("-fx-background-color: #231f20");
         scoreBoard= new ScoreBoardTable();
         table=scoreBoard.start();
         loginP=createLogin();
@@ -116,6 +121,7 @@ public class MarchMadnessGUI extends Application {
         root.setTop(toolBar);   
         root.setBottom(btoolBar);
         Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("dark-mode.css").toExternalForm());
         primaryStage.setMaximized(true);
 
         primaryStage.setTitle("March Madness Bracket Simulator");
@@ -144,6 +150,9 @@ public class MarchMadnessGUI extends Application {
         
        scoreBoardButton.setDisable(false);
        viewBracketButton.setDisable(false);
+
+       //NEW - Joey
+       realResultsButton.setDisable(false);
        
        simResultBracket = TournamentInfo.getEmptyBracket();
        simResultBracket.simulate();
@@ -153,6 +162,8 @@ public class MarchMadnessGUI extends Application {
        }
         
         displayPane(table);
+
+
     }
     
     /**
@@ -168,6 +179,10 @@ public class MarchMadnessGUI extends Application {
         scoreBoardButton.setDisable(true);
         viewBracketButton.setDisable(true);
         btoolBar.setDisable(true);
+
+        //NEW - Joey
+        realResultsButton.setDisable(true);
+        
         displayPane(loginP);
     }
     
@@ -323,6 +338,28 @@ public class MarchMadnessGUI extends Application {
         clearButton=new Button("Clear");
         resetButton=new Button("Reset");
         finalizeButton=new Button("Finalize");
+
+        //New - Joey
+        toolBar.setStyle("-fx-background-color: #2e292a; " +
+                        "-fx-border-color: #fe6229; -fx-border-width: 0 0 2 0;");
+        
+        btoolBar.setStyle("-fx-background-color: #2e292a; " +
+                        "-fx-border-color: #3a3435; -fx-border-width: 1 0 0 0;");
+
+        String mutedBtn = "-fx-background-color: transparent; -fx-border-color: #70684e; -fx-border-width: 1;" +
+                          "-fx-text-fill: #a9a073; -fx-font-family: Arial; -fx-font-weight: bold;" + 
+                          "-fx-font-size: 11px; -fx-padding: 5 12 5 12;";
+
+
+
+        scoreBoardButton.setStyle("-fx-background-color: #fe6229; -fx-border-color: #fe6229;" +
+                                  "-fx-border-width: 1; -fx-text-fill: #231f20; -fx-font-family: Arial; " +
+                                  "-fx-font-weight: bold; -fx-font-size: 11px; -fx-padding: 5 12 5 12;");
+        
+        finalizeButton.setStyle("-fx-background-color: #eeab20; -fx-border-color: #eeab20;" +
+                                "-fx-border-width: 1; -fx-text-fill: #231f20; -fx-font-family: Arial; " +
+                                "-fx-font-weight: bold; -fx-font-size: 11px; -fx-padding: 5 12 5 12;");
+        
         toolBar.getItems().addAll(
                 createSpacer(),
                 login,
@@ -340,6 +377,19 @@ public class MarchMadnessGUI extends Application {
                 back=new Button("Choose Division"),
                 createSpacer()
         );
+
+        //NEW - Joey
+        realResultsButton = new Button("2017 Real Results");
+        toolBar.getItems().add(realResultsButton);
+
+        login.setStyle(mutedBtn);
+        simulate.setStyle(mutedBtn);
+        viewBracketButton.setStyle(mutedBtn);
+        clearButton.setStyle(mutedBtn);
+        resetButton.setStyle(mutedBtn);
+        back.setStyle(mutedBtn);
+        realResultsButton.setStyle(mutedBtn);
+
     }
     
    /**
@@ -359,6 +409,9 @@ public class MarchMadnessGUI extends Application {
             bracketPane=new BracketPane(selectedBracket);
             displayPane(bracketPane);
         });
+
+        //NEW - Joey
+        realResultsButton.setOnAction(e -> displayPane(new RealResultsPane()));
     }
     
     /**
@@ -388,26 +441,56 @@ public class MarchMadnessGUI extends Application {
         loginPane.setVgap(10);
         loginPane.setPadding(new Insets(5, 5, 5, 5));
 
+        //NEW - Joey
+        loginPane.setStyle("-fx-background-color: #2e292a; -fx-border-color: #3a3435;" +
+                           "-fx-border-width: 4;  -fx-background-radius: 4; -fx-padding: 5 12 5 12;"
+        );
+
         Text welcomeMessage = new Text("March Madness Login Welcome");
+        
+        //New - Joey
+        welcomeMessage.setStyle("-fx-fill: #eeab20; -fx-font-family: Arial; -fx-font-weight: bold; -fx-font-size: 16px;");
+
         loginPane.add(welcomeMessage, 0, 0, 2, 1);
 
+        //New - Joey
+        String labelStyle = "-fx-text-fill: #a9a073; -fx-font-family: Arial; -fx-font-size: 13px;";
+        String fieldStyle = "-fx-background-color: #3a3435; -fx-border-color: #70684e; -fx-text-fill: #a9a073;" +
+                           "-fx-border-width: 1;  -fx-font-family: Arial; -fx-font-size: 13px; -fx-padding: 5 12 5 12;";
+
         Label userName = new Label("User Name: ");
+        userName.setStyle(labelStyle); 
+
         loginPane.add(userName, 0, 1);
 
         TextField enterUser = new TextField();
+        enterUser.setStyle(fieldStyle);
+
         loginPane.add(enterUser, 1, 1);
 
         Label password = new Label("Password: ");
+        password.setStyle(labelStyle);
+
         loginPane.add(password, 0, 2);
 
         PasswordField passwordField = new PasswordField();
+        passwordField.setStyle(fieldStyle);
+
         loginPane.add(passwordField, 1, 2);
 
         Button signButton = new Button("Sign in");
+
+        //New - Joey
+        signButton.setStyle("-fx-background-color: #fe6229; -fx-border-color: #fe6229; -fx-text-fill: #231f20;" +
+                           "-fx-font-family: Arial; -fx-font-weight: bold; -fx-font-size: 13px; -fx-padding: 7 20 7 20;");
+
         loginPane.add(signButton, 1, 4);
         signButton.setDefaultButton(true);//added by matt 5/7, lets you use sign in button by pressing enter
 
         Label message = new Label();
+        //New - Joey
+        message.setStyle("-fx-text-fill: #a9a073; -fx-font-family: Arial;");
+
         loginPane.add(message, 1, 5);
 
         //LIOR: change this event to work with the new password system

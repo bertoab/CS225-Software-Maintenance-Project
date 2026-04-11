@@ -126,8 +126,9 @@ public class BracketPane extends BorderPane {
          */
         private EventHandler<MouseEvent> enter = mouseEvent -> {
                 BracketNode tmp = (BracketNode) mouseEvent.getSource();
-                tmp.setStyle("-fx-background-color: lightcyan;");
-                tmp.setEffect(new InnerShadow(10, Color.LIGHTCYAN));
+
+                //New - Joey
+                tmp.setStyle("-fx-background-color: #3a3435; -fx-border-color: #fe6229;");
         };
 
         /**
@@ -164,6 +165,10 @@ public class BracketPane extends BorderPane {
 
                 center = new GridPane();
 
+                //New - Joey
+                String darkBg = "-fx-background-color: #231f20;";
+                center.setStyle(darkBg);
+
                 ArrayList<StackPane> buttons = new ArrayList<>();
                 buttons.add(customButton("EAST"));
                 buttons.add(customButton("WEST"));
@@ -182,17 +187,24 @@ public class BracketPane extends BorderPane {
                 //buttons.add(customButton("FINAL"));
                 //panes.put(buttons.get(5), finalPane);
                 fullPane = new GridPane();
+                fullPane.setStyle(darkBg);
+
                 GridPane gp1 = new GridPane();
                 gp1.add(roots.get(0), 0, 0);
                 gp1.add(roots.get(1), 0, 1);
+                gp1.setStyle(darkBg);
+
                 GridPane gp2 = new GridPane();
                 gp2.add(roots.get(2), 0, 0);
                 gp2.add(roots.get(3), 0, 1);
+                gp2.setStyle(darkBg);
+
                 gp2.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
 
                 fullPane.add(gp1, 0, 0);
                 fullPane.add(finalPane, 1, 0, 1, 2);
                 fullPane.add(gp2, 2, 0);
+
                 fullPane.setAlignment(Pos.CENTER);
                 panes.put(buttons.get((buttons.size() - 1)), fullPane);
                 finalPane.toBack();
@@ -208,12 +220,10 @@ public class BracketPane extends BorderPane {
 
                 for (StackPane t : buttons) {
                         t.setOnMouseEntered(mouseEvent -> {
-                                t.setStyle("-fx-background-color: lightblue;");
-                                t.setEffect(new InnerShadow(10, Color.LIGHTCYAN));
+                                t.setStyle("-fx-background-color: #3a3435; -fx-border-color: #fe6229;");
                         });
                         t.setOnMouseExited(mouseEvent -> {
-                                t.setStyle("-fx-background-color: orange;");
-                                t.setEffect(null);
+                                t.setStyle("-fx-background-color: #2e292a; -fx-border-color: #3a3435; -fx-border-width: 0 0 1 0;");
                         });
                         t.setOnMouseClicked(mouseEvent -> {
                                 setCenter(null);
@@ -311,8 +321,13 @@ public class BracketPane extends BorderPane {
                 Rectangle r = new Rectangle(100, 50, Color.TRANSPARENT);
                 Text t = new Text(name);
                 t.setTextAlignment(TextAlignment.CENTER);
+
+                //New - Joey
+                t.setStyle("-fx-fill: #a9a073; -fx-font-family: Arial; -fx-font-weight: bold; -fx-font-size: 12px;");
+                
                 pane.getChildren().addAll(r, t);
-                pane.setStyle("-fx-background-color: orange;");
+                //New - Joey
+                pane.setStyle("-fx-background-color: #2e292a; -fx-border-color: #3a3435; -fx-border-width: 0 0 1 0;");
                 return pane;
         }
 
@@ -345,10 +360,13 @@ public class BracketPane extends BorderPane {
                 nodeFinal2.setOnMouseClicked(clicked);
                 nodeFinal2.setOnMouseDragEntered(enter);
                 nodeFinal2.setOnMouseDragExited(exit);
-                nodeFinal0.setStyle("-fx-border-color: darkblue");
-                nodeFinal1.setStyle("-fx-border-color: darkblue");
-                nodeFinal2.setStyle("-fx-border-color: darkblue");
+                nodeFinal0.setStyle("-fx-border-color: #fe6229; -fx-border-width: 2;");
+                nodeFinal1.setStyle("-fx-border-color: #70684e;");
+                nodeFinal2.setStyle("-fx-border-color: #70684e;");
                 finalPane.setMinWidth(400.0);
+
+                //New - Joey
+                finalPane.setStyle("-fx-background-color: #231f20;");
 
                 return finalPane;
         }
@@ -364,6 +382,14 @@ public class BracketPane extends BorderPane {
                 public Root(int location) {
                         this.location = location;
 
+                        //New - Joey
+                        this.setStyle("-fx-background-color: #231f20;");
+
+//                         createVertices(420, 200, 100, 20, 0, 0);
+//                         createVertices(320, 119, 100, 200, 1, 0);
+//                         createVertices(220, 60, 100, 100, 2, 200);
+//                         createVertices(120, 35, 100, 50, 4, 100);
+//                         createVertices(20, 25, 100, 25, 8, 50);
                         //Matthew Tummino
                         //Adjusted values to better fit school names and box score
                         createVertices(700, 200, 170, 20, 0, 0);
@@ -408,6 +434,13 @@ public class BracketPane extends BorderPane {
                                         Line top = new Line(tl.getX(), tl.getY(), tr.getX(), tr.getY());
                                         Line bottom = new Line(bl.getX(), bl.getY(), br.getX(), br.getY());
                                         Line right = new Line(tr.getX(), tr.getY(), br.getX(), br.getY());
+
+                                        //New - Joey
+                                        String lineStyle = "-fx-stroke: #a9a073; -fx-stroke-width: 1;";
+                                        top.setStyle(lineStyle);
+                                        bottom.setStyle(lineStyle);
+                                        right.setStyle(lineStyle);
+                                        
                                         getChildren().addAll(top, bottom, right, nTop, nBottom);
                                         isTop = !isTop;
                                         y += increment;
@@ -450,6 +483,9 @@ public class BracketPane extends BorderPane {
                         rect = new Rectangle(rX, rY);
                         rect.setFill(Color.TRANSPARENT);
                         name = new Label(teamName);
+
+                        //New - Joey
+                        name.setStyle("-fx-text-fill: #e8e2d4; -fx-font-family: Arial; -fx-font-size: 12px;");
                         // setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
                         name.setTranslateX(5);
                         getChildren().addAll(name, rect);
