@@ -30,7 +30,7 @@ import com.google.gson.*;
 public class RealResultsPane extends BorderPane {
 
     private static final String[] ROUND_NAMES = {"Round of 64", "Round of 32",
-                                                "Sweet 16", "Elite Eight", "Final Four", 
+                                                "Sweet 16", "Elite 8", "Final Four",
                                                 "Championship"
     };
 
