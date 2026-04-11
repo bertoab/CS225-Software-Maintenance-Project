@@ -209,28 +209,73 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
      */
     public int scoreBracket(Bracket master){
         int score = 0;
+
+        //Adjustment by Matthew Tummino
+        //Accounts for the box score being added to the winner names in the bracket
+        for(int i = 0; i < 63; i++)
+        {
+            String masterString = master.getBracket().get(i);
+            int stopIndex = masterString.indexOf("[");
+            if (stopIndex != -1)
+                masterString = masterString.substring(0, stopIndex-1);
+            System.out.println(masterString);
+            if (bracket.get(i).equals(masterString))
+            {
+                if(i == 0)
+                    score+=32;
+                else if( i >= 1 && i < 3)
+                    score+=16;
+                else if( i >= 3 && i < 7)
+                    score+=8;
+                else if( i >= 7 && i < 15)
+                    score+=4;
+                else if( i >= 15 && i < 31)
+                    score+=2;
+                else if( i >= 31 && i < 63)
+                    score+=1;
+            }
+        }
+        /*
         if (bracket.get(0).equals(master.getBracket().get(0)))//finals
+        {   
             score+=32;
+        }
         for (int i = 1; i < 3; i++) {
+            System.out.print(i + " ");
             if (bracket.get(i).equals(master.getBracket().get(i)))//semi
+            {
                 score+=16;
+            }
         }
         for (int i = 3; i < 7; i++) {
+            System.out.print(i + " ");
             if (bracket.get(i).equals(master.getBracket().get(i)))//quarters
+            {
                 score+=8;
+            }
         }
         for (int i = 7; i < 15; i++) {
+            System.out.print(i + " ");
             if (bracket.get(i).equals(master.getBracket().get(i)))//sweet 16
-            score+=4;
+            {
+                score+=4;
+            }
         }
         for (int i = 15; i < 31; i++) {
+            System.out.print(i + " ");
             if (bracket.get(i).equals(master.getBracket().get(i)))//round of 32
-            score+=2;
+            {
+                score+=2;
+            }
         }
         for (int i = 31; i < 63; i++) {
+            System.out.print(i + " ");
             if (bracket.get(i).equals(master.getBracket().get(i)))//round of 64
-            score+=1;
+            {
+                score+=1;
+            }
         }
+        */
         return score;
     }
 
@@ -289,6 +334,14 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
                 moveTeamUp(index1);
             else
                 moveTeamUp(index2);
+        }
+
+        for(int i = 62; i>= 0; i--)
+        {
+            int index1 = 2*i+1;
+            int index2 = 2*i+2;
+
+            bracket.set(i, bracket.get(i) + " [" + teamScores[index1] + "-" + teamScores[index2] +"]");
         }
 
     }
