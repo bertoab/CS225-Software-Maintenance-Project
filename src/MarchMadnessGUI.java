@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.InvalidClassException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -563,7 +564,8 @@ public class MarchMadnessGUI extends Application {
      * Tayon Watson 5/5
      * deseralizedBracket
      * @param filename of the seralized bracket file
-     * @return deserialized bracket 
+     * BELOW EDITED BY ROBERTO
+     * @return deserialized Bracket object, or `null` if the Bracket cannot be deserialized
      */
     private static Bracket deserializeBracket(String filename){
         Bracket bracket = null;
@@ -576,8 +578,20 @@ public class MarchMadnessGUI extends Application {
         bracket = (Bracket) in.readObject();
         in.close();
     }catch (IOException | ClassNotFoundException e) {
-      // Grant osborn 5/6 hopefully this never happens either
-      showError(new Exception("Error loading bracket \n"+e.getMessage(),e),false);
+        // ROBERTO
+        if (e instanceof InvalidClassException) { // bracket is outdated version (before hashed password)
+            // let the user know an outdated file is being skipped
+            String header = "Skipping incompatible bracket file";
+            String msg = String.format("\"%s\" is incompatible and cannot be read. The program will skip this file.", filename);
+            Alert alert = new Alert(AlertType.ERROR,msg);
+            alert.setTitle("Error");
+            alert.setHeaderText(header);
+            alert.showAndWait();
+
+            // `bracket` will be `null` when this method returns
+            // the `loadBrackets` method will filter out this value
+        }
+
     } 
     return bracket;
     }
@@ -596,7 +610,10 @@ public class MarchMadnessGUI extends Application {
             String extension = fileName.substring(fileName.lastIndexOf(".")+1);
        
             if (extension.equals("ser")){
-                list.add(deserializeBracket(fileName));
+                // ROBERTO
+                Bracket bracket = deserializeBracket(fileName); // returns `null` for outdated brackets
+                if (bracket instanceof Bracket) // don't add outdated brackets
+                    list.add(bracket);
             }
         }
         return list;
