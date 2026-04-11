@@ -2,13 +2,22 @@
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.InvalidClassException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
+// import java.util.Objects;
+import java.util.Scanner;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -44,6 +53,9 @@ public class MarchMadnessGUI extends Application {
     private Button clearButton;
     private Button resetButton;
     private Button finalizeButton;
+
+    //NEW - Joey
+    private Button realResultsButton;
     
     //allows you to navigate back to division selection screen
     private Button back;
@@ -59,6 +71,9 @@ public class MarchMadnessGUI extends Application {
     private ArrayList<Bracket> playerBrackets;
     private HashMap<String, Bracket> playerMap;
 
+    //LIOR: added attributes for new password system
+    private HashMap<String, byte[]> passwordHashes;
+    private String currentUserLoggedIn;
     // DANIELLE: for help button
     private Stage helpStage;
 
@@ -93,6 +108,7 @@ public class MarchMadnessGUI extends Application {
 
         //the main layout container
         root = new BorderPane();
+        root.setStyle("-fx-background-color: #231f20");
         scoreBoard= new ScoreBoardTable();
         table=scoreBoard.start();
         loginP=createLogin();
@@ -105,6 +121,7 @@ public class MarchMadnessGUI extends Application {
         root.setTop(toolBar);   
         root.setBottom(btoolBar);
         Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("dark-mode.css").toExternalForm());
         primaryStage.setMaximized(true);
 
         primaryStage.setTitle("March Madness Bracket Simulator");
@@ -133,6 +150,9 @@ public class MarchMadnessGUI extends Application {
         
        scoreBoardButton.setDisable(false);
        viewBracketButton.setDisable(false);
+
+       //NEW - Joey
+       realResultsButton.setDisable(false);
        
        simResultBracket = TournamentInfo.getEmptyBracket();
        simResultBracket.simulate();
@@ -142,18 +162,27 @@ public class MarchMadnessGUI extends Application {
        }
         
         displayPane(table);
+
+
     }
     
     /**
      * Displays the login screen
      * 
      */
-    private void login(){            
+    private void login(){        
+        //LIOR: add this statement to work with new password system
+        passwordHashes = loadPasswordHashes();
+
         login.setDisable(true);
         simulate.setDisable(true);
         scoreBoardButton.setDisable(true);
         viewBracketButton.setDisable(true);
         btoolBar.setDisable(true);
+
+        //NEW - Joey
+        realResultsButton.setDisable(true);
+        
         displayPane(loginP);
     }
     
@@ -269,6 +298,7 @@ public class MarchMadnessGUI extends Application {
            simulate.setDisable(false);
            login.setDisable(false);
            //save the bracket along with account info
+           selectedBracket.setPlayerName(currentUserLoggedIn);
            serializeBracket(selectedBracket);
             
        }else{
@@ -312,6 +342,28 @@ public class MarchMadnessGUI extends Application {
         clearButton=new Button("Clear");
         resetButton=new Button("Reset");
         finalizeButton=new Button("Finalize");
+
+        //New - Joey
+        toolBar.setStyle("-fx-background-color: #2e292a; " +
+                        "-fx-border-color: #fe6229; -fx-border-width: 0 0 2 0;");
+        
+        btoolBar.setStyle("-fx-background-color: #2e292a; " +
+                        "-fx-border-color: #3a3435; -fx-border-width: 1 0 0 0;");
+
+        String mutedBtn = "-fx-background-color: transparent; -fx-border-color: #70684e; -fx-border-width: 1;" +
+                          "-fx-text-fill: #a9a073; -fx-font-family: Arial; -fx-font-weight: bold;" + 
+                          "-fx-font-size: 11px; -fx-padding: 5 12 5 12;";
+
+
+
+        scoreBoardButton.setStyle("-fx-background-color: #fe6229; -fx-border-color: #fe6229;" +
+                                  "-fx-border-width: 1; -fx-text-fill: #231f20; -fx-font-family: Arial; " +
+                                  "-fx-font-weight: bold; -fx-font-size: 11px; -fx-padding: 5 12 5 12;");
+        
+        finalizeButton.setStyle("-fx-background-color: #eeab20; -fx-border-color: #eeab20;" +
+                                "-fx-border-width: 1; -fx-text-fill: #231f20; -fx-font-family: Arial; " +
+                                "-fx-font-weight: bold; -fx-font-size: 11px; -fx-padding: 5 12 5 12;");
+        
         toolBar.getItems().addAll(
                 createSpacer(),
                 login,
@@ -329,6 +381,19 @@ public class MarchMadnessGUI extends Application {
                 back=new Button("Choose Division"),
                 createSpacer()
         );
+
+        //NEW - Joey
+        realResultsButton = new Button("2017 Real Results");
+        toolBar.getItems().add(realResultsButton);
+
+        login.setStyle(mutedBtn);
+        simulate.setStyle(mutedBtn);
+        viewBracketButton.setStyle(mutedBtn);
+        clearButton.setStyle(mutedBtn);
+        resetButton.setStyle(mutedBtn);
+        back.setStyle(mutedBtn);
+        realResultsButton.setStyle(mutedBtn);
+
     }
     
    /**
@@ -348,6 +413,9 @@ public class MarchMadnessGUI extends Application {
             bracketPane=new BracketPane(selectedBracket);
             displayPane(bracketPane);
         });
+
+        //NEW - Joey
+        realResultsButton.setOnAction(e -> displayPane(new RealResultsPane()));
     }
     
     /**
@@ -377,48 +445,88 @@ public class MarchMadnessGUI extends Application {
         loginPane.setVgap(10);
         loginPane.setPadding(new Insets(5, 5, 5, 5));
 
+        //NEW - Joey
+        loginPane.setStyle("-fx-background-color: #2e292a; -fx-border-color: #3a3435;" +
+                           "-fx-border-width: 4;  -fx-background-radius: 4; -fx-padding: 5 12 5 12;"
+        );
+
         Text welcomeMessage = new Text("March Madness Login Welcome");
+        
+        //New - Joey
+        welcomeMessage.setStyle("-fx-fill: #eeab20; -fx-font-family: Arial; -fx-font-weight: bold; -fx-font-size: 16px;");
+
         loginPane.add(welcomeMessage, 0, 0, 2, 1);
 
+        //New - Joey
+        String labelStyle = "-fx-text-fill: #a9a073; -fx-font-family: Arial; -fx-font-size: 13px;";
+        String fieldStyle = "-fx-background-color: #3a3435; -fx-border-color: #70684e; -fx-text-fill: #a9a073;" +
+                           "-fx-border-width: 1;  -fx-font-family: Arial; -fx-font-size: 13px; -fx-padding: 5 12 5 12;";
+
         Label userName = new Label("User Name: ");
+        userName.setStyle(labelStyle); 
+
         loginPane.add(userName, 0, 1);
 
         TextField enterUser = new TextField();
+        enterUser.setStyle(fieldStyle);
+
         loginPane.add(enterUser, 1, 1);
 
         Label password = new Label("Password: ");
+        password.setStyle(labelStyle);
+
         loginPane.add(password, 0, 2);
 
         PasswordField passwordField = new PasswordField();
+        passwordField.setStyle(fieldStyle);
+
         loginPane.add(passwordField, 1, 2);
 
         Button signButton = new Button("Sign in");
+
+        //New - Joey
+        signButton.setStyle("-fx-background-color: #fe6229; -fx-border-color: #fe6229; -fx-text-fill: #231f20;" +
+                           "-fx-font-family: Arial; -fx-font-weight: bold; -fx-font-size: 13px; -fx-padding: 7 20 7 20;");
+
         loginPane.add(signButton, 1, 4);
         signButton.setDefaultButton(true);//added by matt 5/7, lets you use sign in button by pressing enter
 
         Label message = new Label();
+        //New - Joey
+        message.setStyle("-fx-text-fill: #a9a073; -fx-font-family: Arial;");
+
         loginPane.add(message, 1, 5);
 
+        //LIOR: change this event to work with the new password system
         signButton.setOnAction(event -> {
 
             // the name user enter
             String name = enterUser.getText();
             // the password user enter
             String playerPass = passwordField.getText();
+            byte[] playerPassHash = null;
+            try {
+                 playerPassHash = stringToHash(playerPass);
+            }
+            catch(NoSuchAlgorithmException e) {
+                showError(e, false);
+            }
+           
 
-        
-          
-            
-            if (playerMap.get(name) != null) {
+            if (passwordHashes.containsKey(name)) {
                 //check password of user
-                 
-                Bracket tmpBracket = this.playerMap.get(name);
+                
+                // Bracket tmpBracket = this.playerMap.get(name);
                
-                String password1 = tmpBracket.getPassword();
+                byte[] passwordHash = passwordHashes.get(name);
 
-                if (Objects.equals(password1, playerPass)) {
+                if (Arrays.equals(passwordHash, playerPassHash)) {
                     // load bracket
-                    selectedBracket=playerMap.get(name);
+
+                    //LIOR: check for if an account has been made but a bracket was never saved   
+                    System.out.println(playerMap.containsKey(name));       
+                    selectedBracket = (playerMap.containsKey(name)) ? playerMap.get(name) : TournamentInfo.getEmptyBracket();
+                    currentUserLoggedIn = name;
                     chooseBracket();
                 }else{
                    infoAlert("The password you have entered is incorrect!");
@@ -431,13 +539,24 @@ public class MarchMadnessGUI extends Application {
                     //LIOR: changed this to work with reworked TournamentInfo
                     Bracket tmpPlayerBracket = TournamentInfo.getEmptyBracket();
                     tmpPlayerBracket.setPlayerName(name);
+
                     playerBrackets.add(tmpPlayerBracket);
-                    tmpPlayerBracket.setPassword(playerPass);
+                    // tmpPlayerBracket.setPassword(playerPass);
+                    
 
                     playerMap.put(name, tmpPlayerBracket);
                     selectedBracket = tmpPlayerBracket;
                     //alert user that an account has been created
                     infoAlert("No user with the Username \""  + name + "\" exists. A new account has been created.");
+                    
+                    try {
+                        appendLoginInfo(name, playerPassHash);
+                    }
+                    catch(IOException e) {
+                        showError(e, false);
+                    }
+
+                    currentUserLoggedIn = name;
                     chooseBracket();
                 }
             }
@@ -532,7 +651,8 @@ public class MarchMadnessGUI extends Application {
      * Tayon Watson 5/5
      * deseralizedBracket
      * @param filename of the seralized bracket file
-     * @return deserialized bracket 
+     * BELOW EDITED BY ROBERTO
+     * @return deserialized Bracket object, or `null` if the Bracket cannot be deserialized
      */
     private static Bracket deserializeBracket(String filename){
         Bracket bracket = null;
@@ -545,8 +665,20 @@ public class MarchMadnessGUI extends Application {
         bracket = (Bracket) in.readObject();
         in.close();
     }catch (IOException | ClassNotFoundException e) {
-      // Grant osborn 5/6 hopefully this never happens either
-      showError(new Exception("Error loading bracket \n"+e.getMessage(),e),false);
+        // ROBERTO
+        if (e instanceof InvalidClassException) { // bracket is outdated version (before hashed password)
+            // let the user know an outdated file is being skipped
+            String header = "Skipping incompatible bracket file";
+            String msg = String.format("\"%s\" is incompatible and cannot be read. The program will skip this file.", filename);
+            Alert alert = new Alert(AlertType.ERROR,msg);
+            alert.setTitle("Error");
+            alert.setHeaderText(header);
+            alert.showAndWait();
+
+            // `bracket` will be `null` when this method returns
+            // the `loadBrackets` method will filter out this value
+        }
+
     } 
     return bracket;
     }
@@ -565,9 +697,57 @@ public class MarchMadnessGUI extends Application {
             String extension = fileName.substring(fileName.lastIndexOf(".")+1);
        
             if (extension.equals("ser")){
-                list.add(deserializeBracket(fileName));
+                // ROBERTO
+                Bracket bracket = deserializeBracket(fileName); // returns `null` for outdated brackets
+                if (bracket instanceof Bracket) // don't add outdated brackets
+                    list.add(bracket);
             }
         }
         return list;
+    }
+    
+    //LIOR: utility method for password checking and storing
+    private static byte[] stringToHash(String input) throws NoSuchAlgorithmException {
+        return MessageDigest.getInstance("SHA-256").digest(input.getBytes());
+    }
+
+    //LIOR: load the hashes in from passwordHashes.txt
+    private HashMap<String, byte[]> loadPasswordHashes() {
+        Scanner scnr = null;
+
+        try {
+            scnr = new Scanner(new File("passwordHashes.txt"));
+        }
+        catch(FileNotFoundException e) {
+            showError(e, false);
+        }
+        
+        HashMap<String, byte[]> passwordHashMap = new HashMap<String, byte[]>();
+
+        while (scnr.hasNext()) {
+
+            String userName = scnr.nextLine().trim();
+            byte[] hash = new byte[32]; //SHA-256 algorithm always generates a 32 byte code
+            for (int i = 0; i < hash.length; ++i) {
+                hash[i] = scnr.nextByte();
+            }
+            scnr.nextLine();
+
+            passwordHashMap.put(userName, hash);
+        }
+
+         return passwordHashMap;
+    }
+
+    //LIOR: add set of login info to passwordHashes.txt
+    private void appendLoginInfo(String username, byte[] passwordHash) throws IOException {
+        FileWriter writer = new FileWriter("passwordHashes.txt", true);
+        writer.write(username + "\n");
+
+        for (byte b : passwordHash) {
+            writer.write((int)b + " ");
+        }
+        writer.write("\n");
+        writer.close();
     }
 }

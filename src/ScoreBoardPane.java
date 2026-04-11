@@ -55,6 +55,11 @@ public class ScoreBoardPane{
         final Label label = new Label("March Madness");
         label.setFont(new Font("Arial", 20));
 
+        //New - Joey
+        label.setStyle("-fx-text-fill: #eeab20; -fx-font-family: Arial; -fx-font-weight: bold; -fx-font-size: 16px;");
+        String colStyle = "-fx-background-color: #2e292a; -fx-text-fill: #a9a073; -fx-font-weight: bold;" + 
+                          "-fx-font-size: 12px; -fx-alignment: CENTER;";
+
         /**
          * TableColumn userNameCol is the column on the left side of the table
          */
@@ -65,6 +70,7 @@ public class ScoreBoardPane{
         userNameCol.setCellValueFactory(new MapValueFactory(Column1MapKey));
         userNameCol.setSortable(false);
         userNameCol.setSortType(TableColumn.SortType.DESCENDING); //sorts column from highest to lowest
+        userNameCol.setStyle(colStyle);
 
         /**
          * TableColumn totalPtsCol is the column on the right side of the table
@@ -76,11 +82,17 @@ public class ScoreBoardPane{
         totalPtsCol.setCellValueFactory(new MapValueFactory(Column2MapKey));
         totalPtsCol.setSortable(false);
         totalPtsCol.setSortType(TableColumn.SortType.DESCENDING); //sorts column from highest to lowest
+        totalPtsCol.setStyle(colStyle);
 
         /**
          * TableView table_view is what the user sees in the GUI. This creates the table.
          */
         TableView table_view = new TableView<>(generateDataInMap());
+
+        //New - Joey
+        table_view.setStyle("-fx-background-color: #231f20; -fx-border-color: #3a3435" + 
+                            "-fx-table-cell-border-color: #3a3435;"
+        );
         table_view.setEditable(true);
         table_view.getSelectionModel().setCellSelectionEnabled(true);
         table_view.getColumns().setAll(userNameCol, totalPtsCol);
@@ -105,6 +117,9 @@ public class ScoreBoardPane{
         final VBox vbox = new VBox();
         vbox.setSpacing(6);
         vbox.setPadding(new Insets(12, 0, 0, 12));
+
+        //New - Joey
+        vbox.setStyle("-fx-background-color: #231f20;");
         vbox.getChildren().addAll(label, table_view);
 
         return table_view;

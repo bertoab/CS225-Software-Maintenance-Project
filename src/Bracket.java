@@ -12,12 +12,13 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     private ArrayList<String> bracket;
     private transient int[] teamScores = new int[127];
     private String playerName;
-    private String password;
+    // LIOR: removed this attribute
+    // private String password;
     static final int EAST_BRACKET = 3;
     static final int WEST_BRACKET = 4;
     static final int MIDWEST_BRACKET = 5;
     static final int SOUTH_BRACKET = 6;
-    public static final long serialVersionUID = 5609181678399742983L;
+    public static final long serialVersionUID = 1L;
 
     //Constructor
     // DANIELLE: default constructor
@@ -143,15 +144,16 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         bracket.add(position, s);
     }
 
+    //LIOR:  this method isn't used anymore
     /** 
      * Hillary Ssemakula:
      * set player's password to string parameter 
      * @param password, a String
      */
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
+    // public void setPassword(String password)
+    // {
+    //     this.password = password;
+    // }
 
       /** 
         * Hillary: 
@@ -163,15 +165,16 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         return playerName;
     }
     
+    //LIOR: this method isn't used anymore
       /** 
         * Hillary:
         * returns the player's password
         * @return String
         */
-    public String getPassword()
-    {
-        return password;
-    }
+    // public String getPassword()
+    // {
+    //     return password;
+    // }
     
       /** 
         * Hillary:
