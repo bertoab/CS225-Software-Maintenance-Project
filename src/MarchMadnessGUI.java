@@ -54,8 +54,10 @@ public class MarchMadnessGUI extends Application {
     private Button resetButton;
     private Button finalizeButton;
 
-    // Matthew Tummino: button purely for testing, will remove later
-    private Button testButton;
+    // Matthew Tummino
+    //Used to cycle between brackets to compare to the simulated bracket
+    private Button cycleButton;
+    private int currentBracket = -1;
 
     //NEW - Joey
     private Button realResultsButton;
@@ -91,6 +93,7 @@ public class MarchMadnessGUI extends Application {
     
     @Override
     public void start(Stage primaryStage) {
+
         //LIOR: change this to use reworked TournamentInfo properly
         //try to load all the files, if there is an error display it
         try{
@@ -130,6 +133,8 @@ public class MarchMadnessGUI extends Application {
         primaryStage.setTitle("March Madness Bracket Simulator");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        System.out.println(playerBrackets.size());
     }
 
     /**
@@ -153,6 +158,7 @@ public class MarchMadnessGUI extends Application {
         
        scoreBoardButton.setDisable(false);
        viewBracketButton.setDisable(false);
+       cycleButton.setDisable(false);
 
        //NEW - Joey
        realResultsButton.setDisable(false);
@@ -181,6 +187,7 @@ public class MarchMadnessGUI extends Application {
         simulate.setDisable(true);
         scoreBoardButton.setDisable(true);
         viewBracketButton.setDisable(true);
+        cycleButton.setDisable(true);
         btoolBar.setDisable(true);
 
         //NEW - Joey
@@ -254,11 +261,16 @@ public class MarchMadnessGUI extends Application {
     }
     
     //Matthew Tummino
-    //A test method, at the moment it selects the first available player bracket and highlights their correct
-    //predictions on the sim bracket
-    private void test()
+    //Cycles through the multiple brackets to compate to the simulated bracket.
+    private void cycle()
     {
-        simResultBracket.matchCorrect(playerBrackets.get(0).getCorrectArray());
+        //Move up one in the currently compared bracket. Will return to zero at the end of the list
+        currentBracket++;
+        if(currentBracket >= playerBrackets.size())
+            currentBracket = 0;
+
+        //Matches the correctness state of the simulated bracket to that of the selected bracket.
+        simResultBracket.matchCorrect(playerBrackets.get(currentBracket).getCorrectArray());
         selectedBracket=simResultBracket;
 
         //An alternate approach, shows the player's bracket instead of the sim bracket
@@ -357,7 +369,7 @@ public class MarchMadnessGUI extends Application {
         // DANIELLE: add help button
         helpButton = new Button("Help");
         
-        testButton = new Button("Test");
+        cycleButton = new Button("Cycle Brackets");
 
         clearButton=new Button("Clear");
         resetButton=new Button("Reset");
@@ -428,7 +440,7 @@ public class MarchMadnessGUI extends Application {
         // DANIELLE: the help button is available at all times for user to read
         helpButton.setOnAction(e->help());
 
-        testButton.setOnAction(e->test());
+        cycleButton.setOnAction(e->cycle());
 
         clearButton.setOnAction(e->clear());
         resetButton.setOnAction(e->reset());

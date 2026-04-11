@@ -20,9 +20,7 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     static final int MIDWEST_BRACKET = 5;
     static final int SOUTH_BRACKET = 6;
     public static final long serialVersionUID = 1L;
-
-    // Matthew Tummin: used to mark correct game predictions
-    private Boolean[] correct = new Boolean[63];
+    private Boolean[] correct = new Boolean[63]; // Matthew Tummino: used to mark correct game predictions
     
 
     //Constructor
@@ -366,11 +364,21 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         return correct[i];
     }
 
+    /**
+     * @author Matthew Tummino
+     * Returns a Boolean array of the correct predictions values of the bracket
+     * @return the correct predictions array of the bracket
+     */
     public Boolean[] getCorrectArray()
     {
         return correct;
     }
 
+    /**
+     * @author Matthew Tummino
+     * Set the correct array of the bracket to match the provided Boolean array
+     * @param match the Boolean array to be matched
+     */
     public void matchCorrect(Boolean[] match)
     {
         for(int i = 0; i < correct.length; i++)

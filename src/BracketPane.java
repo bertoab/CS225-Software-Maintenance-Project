@@ -501,8 +501,10 @@ public class BracketPane extends BorderPane {
                         return teamName;
                 }
 
+                //adjusted by Matthew Tummino to account for displaying results
                 /**
                  * @param teamName The name to assign to the node.
+                 * @param correct whether or not game prediction was correct
                  */
                 public void setName(String teamName, boolean correct) {
                         this.teamName = teamName;
@@ -511,7 +513,11 @@ public class BracketPane extends BorderPane {
                         if(correct)
                                 name.setStyle("-fx-text-fill: #38d72a;");
                 }
+                
 
+                /**
+                 * @param teamName The name to assign to the node.
+                 */
                 public void setName(String teamName)
                 {
                         setName(teamName,false);
