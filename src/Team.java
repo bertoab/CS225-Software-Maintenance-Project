@@ -136,9 +136,8 @@ public class Team{
    */
   @Override
   public String toString() {
-    String representation = this.name + ", " + this.nickname + ", " + this.info + ", " +
+    return this.name + ", " + this.nickname + ", " + this.info + ", " +
             this.ranking + ", " + this.offensePPG + ", " + this.defensePPG;
-    return representation;
   }
 
   /**

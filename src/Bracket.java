@@ -331,8 +331,7 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         Bracket bracket = (Bracket) obj;
 
         return this.getBracket().equals(bracket.getBracket())
-                && this.getPlayerName().equals(bracket.getPlayerName())
-                && this.getPassword().equals(bracket.getPassword());
+                && this.getPlayerName().equals(bracket.getPlayerName());
     }
 
 }
