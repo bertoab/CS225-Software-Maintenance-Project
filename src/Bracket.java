@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-import java.io.Serializable; 
+import java.io.Serializable;
 
 /**
  * Bracket Class
@@ -136,9 +136,9 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         bracket.add(position, s);
     }
 
-    /** 
+    /**
      * Hillary Ssemakula:
-     * set player's password to string parameter 
+     * set player's password to string parameter
      * @param password, a String
      */
     public void setPassword(String password)
@@ -146,32 +146,32 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         this.password = password;
     }
 
-      /** 
-        * Hillary: 
-        * returns the name of the player
-        * @return String
-        */
+    /**
+     * Hillary:
+     * returns the name of the player
+     * @return String
+     */
     public String getPlayerName()
     {
         return playerName;
     }
-    
-      /** 
-        * Hillary:
-        * returns the player's password
-        * @return String
-        */
+
+    /**
+     * Hillary:
+     * returns the player's password
+     * @return String
+     */
     public String getPassword()
     {
         return password;
     }
-    
-      /** 
-        * Hillary:
-        * returns true or false depending on whether there are any empty slots on the bracket.
-        * If a position has an empty string then the advancing team has not been chosen for that spot and the whole bracket is not complete.
-        * @return boolean.
-        */
+
+    /**
+     * Hillary:
+     * returns true or false depending on whether there are any empty slots on the bracket.
+     * If a position has an empty string then the advancing team has not been chosen for that spot and the whole bracket is not complete.
+     * @return boolean.
+     */
     public boolean isComplete()
     {
         for(String team: bracket){
@@ -179,14 +179,14 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         }
         return true;
     }
-    
-    /** 
-      * Hillary:
-      * returns true or false depending on whether there are any empty slots in te bracket from a given point all the way to the starting 64 teams.
-      * If the root itself is empty return false. otherwise the method is recursively applied to the left and right subtrees of the root.
-      * @param root, the int index of the root
-      * @return boolean
-    *update by matt and hillary 5/2 */
+
+    /**
+     * Hillary:
+     * returns true or false depending on whether there are any empty slots in te bracket from a given point all the way to the starting 64 teams.
+     * If the root itself is empty return false. otherwise the method is recursively applied to the left and right subtrees of the root.
+     * @param root, the int index of the root
+     * @return boolean
+     *update by matt and hillary 5/2 */
     public boolean isSubtreeComplete(int root)
     {
         if(bracket.get(root).equals(""))
@@ -218,15 +218,15 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         }
         for (int i = 7; i < 15; i++) {
             if (bracket.get(i).equals(master.getBracket().get(i)))//sweet 16
-            score+=4;
+                score+=4;
         }
         for (int i = 15; i < 31; i++) {
             if (bracket.get(i).equals(master.getBracket().get(i)))//round of 32
-            score+=2;
+                score+=2;
         }
         for (int i = 31; i < 63; i++) {
             if (bracket.get(i).equals(master.getBracket().get(i)))//round of 64
-            score+=1;
+                score+=1;
         }
         return score;
     }
@@ -258,23 +258,18 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     public int getTeamScore(int index){
         return teamScores[index];
     }
-
-    //LIOR: moved this method here from TournamentInfo
     public void simulate(){
         for (int i = 62; i >= 0; i--) {
-        /* The equation for score that I settled on is this:
-         * (Random int 75-135) * (1 - 0.02 * seed ranking)
-         * This way, the multiplier would be between 0.68 and 0.98. Multiply that by 75-135, and you get a reasonable score with room for chance to prevail for lower teams. */
-
-            int index1 = 2*i+1;
-            int index2 = 2*i+2;
+            int index1 = 2 * i + 1;
+            int index2 = 2 * i + 2;
 
             Team team1 = TournamentInfo.getTeam(bracket.get(index1));
             Team team2 = TournamentInfo.getTeam(bracket.get(index2));
 
             int score1 = 0;
             int score2 = 0;
-            while(score1==score2) {
+
+            while (score1 == score2) {
                 score1 = (int) (((Math.random() * 136) + 75) * (1 - (team1.getRanking() * 0.02)));
                 score2 = (int) (((Math.random() * 136) + 75) * (1 - (team2.getRanking() * 0.02)));
             }
@@ -282,12 +277,11 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
             setTeamScore(index1, score1);
             setTeamScore(index2, score2);
 
-            if(score1>score2)
+            if (score1 > score2) {
                 moveTeamUp(index1);
-            else
+            } else {
                 moveTeamUp(index2);
+            }
         }
-
     }
 }
-
