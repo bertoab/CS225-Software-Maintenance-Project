@@ -72,7 +72,7 @@ public class ScoreBoardTable {
             }
         });
         totalPtsCol.setSortable(true);
-        totalPtsCol.setSortType(TableColumn.SortType.ASCENDING); //sorts column from highest to lowest
+        totalPtsCol.setSortType(TableColumn.SortType.DESCENDING); //sorts column from highest to lowest
 
         /**
          * TableView table_view is what the user sees in the GUI. This creates the table.

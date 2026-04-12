@@ -30,15 +30,15 @@ import javafx.stage.Stage;
 
 /**
  *  MarchMadnessGUI
- * 
+ *
  * this class contains the buttons the user interacts
- * with and controls the actions of other objects 
+ * with and controls the actions of other objects
  *
  * @author Grant Osborn
  */
 public class MarchMadnessGUI extends Application {
-    
-    
+
+
     //all the gui ellements
     private BorderPane root;
     private ToolBar toolBar;
@@ -63,8 +63,8 @@ public class MarchMadnessGUI extends Application {
     
     //allows you to navigate back to division selection screen
     private Button back;
-  
-    
+
+
     //LIOR: removed this attribute
     // private Bracket startingBracket;
     //reference to currently logged in bracket
@@ -88,8 +88,8 @@ public class MarchMadnessGUI extends Application {
 
     //LIOR: removed this attribute
     // private TournamentInfo teamInfo;
-    
-    
+
+
     @Override
     public void start(Stage primaryStage) {
 
@@ -115,12 +115,12 @@ public class MarchMadnessGUI extends Application {
         table=scoreBoard.start();
         loginP=createLogin();
         CreateToolBars();
-        
+
         //display login screen
         login();
-        
+
         setActions();
-        root.setTop(toolBar);   
+        root.setTop(toolBar);
         root.setBottom(btoolBar);
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("dark-mode.css").toExternalForm());
@@ -137,16 +137,20 @@ public class MarchMadnessGUI extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
-    
-    
+
+
+
     /**
-     * simulates the tournament  
+     * simulates the tournament
      * simulation happens only once and
      * after the simulation no more users can login
      */
     private void simulate(){
-        //cant login and restart prog after simulate
+        if (!confirmSimulate()) {
+            return;
+        }
+
+        // once simulation happens, stop further editing/account switching
         login.setDisable(true);
         simulate.setDisable(true);
         
@@ -168,16 +172,17 @@ public class MarchMadnessGUI extends Application {
 
 
     }
-    
+
     /**
      * Displays the login screen
-     * 
+     *
      */
     private void login(){        
         //LIOR: add this statement to work with new password system
         passwordHashes = loadPasswordHashes();
 
         login.setDisable(true);
+        updateSimulateButton();
         simulate.setDisable(true);
         scoreBoardButton.setDisable(true);
         viewBracketButton.setDisable(true);
@@ -189,26 +194,26 @@ public class MarchMadnessGUI extends Application {
         
         displayPane(loginP);
     }
-    
-     /**
+
+    /**
      * Displays the score board
-     * 
+     *
      */
     private void scoreBoard(){
         displayPane(table);
     }
-    
-     /**
-      * Displays Simulated Bracket
-      * 
-      */
+
+    /**
+     * Displays Simulated Bracket
+     *
+     */
     private void viewBracket(){
-       selectedBracket=simResultBracket;
-       bracketPane=new BracketPane(selectedBracket);
-       GridPane full = bracketPane.getFullPane();
-       full.setAlignment(Pos.CENTER);
-       full.setDisable(true);
-       displayPane(new ScrollPane(full)); 
+        selectedBracket=simResultBracket;
+        bracketPane=new BracketPane(selectedBracket);
+        GridPane full = bracketPane.getFullPane();
+        full.setAlignment(Pos.CENTER);
+        full.setDisable(true);
+        displayPane(new ScrollPane(full));
     }
 
     // DANIELLE: help button functionality
@@ -285,28 +290,26 @@ public class MarchMadnessGUI extends Application {
 
     /**
      * allows user to choose bracket
-     * 
+     *
      */
-   private void chooseBracket(){
-        //login.setDisable(true);
+    private void chooseBracket(){
+        login.setDisable(false);
+        updateSimulateButton();
         btoolBar.setDisable(false);
-        bracketPane=new BracketPane(selectedBracket);
+        bracketPane = new BracketPane(selectedBracket);
         displayPane(bracketPane);
-
     }
     /**
      * resets current selected sub tree
      * for final4 reset Ro2 and winner
      */
     private void clear(){
-      
-      
-      bracketPane.clear();
-      bracketPane=new BracketPane(selectedBracket);
-      displayPane(bracketPane);
-        
+        bracketPane.clear();
+        bracketPane = new BracketPane(selectedBracket);
+        displayPane(bracketPane);
+        updateSimulateButton();
     }
-    
+
     /**
      * resets entire bracket
      */
@@ -323,50 +326,35 @@ public class MarchMadnessGUI extends Application {
             }
             bracketPane=new BracketPane(selectedBracket);
             displayPane(bracketPane);
+            updateSimulateButton();
         }
     }
-    
+
     private void finalizeBracket(){
-       if(bracketPane.isComplete()){
-           btoolBar.setDisable(true);
-           bracketPane.setDisable(true);
-           //save the bracket along with account info
-           selectedBracket.setPlayerName(currentUserLoggedIn);
-           // Gabe change: only add a bracket to the session after a successful save
-           if (serializeBracket(selectedBracket)) {
-               addSessionParticipant(selectedBracket);
-               simulate.setDisable(false);
-               login.setDisable(false);
-           } else {
-               btoolBar.setDisable(false);
-               bracketPane.setDisable(false);
-           }
-            
-       }else{
-            infoAlert("You can only finalize a bracket once it has been completed.");
-            //go back to bracket section selection screen
-            // bracketPane=new BracketPane(selectedBracket);
-            displayPane(bracketPane);
-        
-       }
-       //bracketPane=new BracketPane(selectedBracket);
-      
-      
-        
+        // Gabe change: only add a bracket to the session after a successful save
+        if (serializeBracket(selectedBracket)) {
+            addSessionParticipant(selectedBracket);
+            login.setDisable(false);
+        } else {
+            btoolBar.setDisable(false);
+            bracketPane.setDisable(false);
+        }
+        updateSimulateButton();
+        infoAlert("Bracket saved.");
     }
-    
-    
+
+
     /**
      * displays element in the center of the screen
-     * 
-     * @param p must use a subclass of Pane for layout. 
+     *
+     * @param p must use a subclass of Pane for layout.
      * to be properly center aligned in  the parent node
      */
     private void displayPane(Node p){
         root.setCenter(p);
         BorderPane.setAlignment(p,Pos.CENTER);
     }
-    
+
     /**
      * Creates toolBar and buttons.
      * adds buttons to the toolbar and saves global references to them
@@ -385,7 +373,8 @@ public class MarchMadnessGUI extends Application {
 
         clearButton=new Button("Clear");
         resetButton=new Button("Reset");
-        finalizeButton=new Button("Finalize");
+        //CHRIS
+        finalizeButton=new Button("Save");
 
         //New - Joey
         toolBar.setStyle("-fx-background-color: #2e292a; " +
@@ -442,10 +431,10 @@ public class MarchMadnessGUI extends Application {
         helpButton.setStyle(mutedBtn);
 
     }
-    
-   /**
-    * sets the actions for each button
-    */
+
+    /**
+     * sets the actions for each button
+     */
     private void setActions(){
         login.setOnAction(e->login());
         simulate.setOnAction(e->simulate());
@@ -467,7 +456,7 @@ public class MarchMadnessGUI extends Application {
         //NEW - Joey
         realResultsButton.setOnAction(e -> displayPane(new RealResultsPane()));
     }
-    
+
     /**
      * Creates a spacer for centering buttons in a ToolBar
      */
@@ -479,11 +468,11 @@ public class MarchMadnessGUI extends Application {
         );
         return spacer;
     }
-    
-    
+
+
     private GridPane createLogin(){
-        
-        
+
+
         /*
         LoginPane
         Sergio and Joao
@@ -598,7 +587,7 @@ public class MarchMadnessGUI extends Application {
                     currentUserLoggedIn = name;
                     chooseBracket();
                 }else{
-                   infoAlert("The password you have entered is incorrect!");
+                    infoAlert("The password you have entered is incorrect!");
                 }
 
             } else {
@@ -624,10 +613,10 @@ public class MarchMadnessGUI extends Application {
                 }
             }
         });
-        
+
         return loginPane;
     }
-    
+
     /**
      * Finds an already loaded participant for the current session.
      */
@@ -640,7 +629,7 @@ public class MarchMadnessGUI extends Application {
         }
         return null;
     }
-    
+
     /**
      * Finds the saved bracket file for a user without loading every .ser file.
      */
@@ -693,17 +682,17 @@ public class MarchMadnessGUI extends Application {
         }
         Alert alert = new Alert(AlertType.ERROR,msg);
         alert.setResizable(true);
-        alert.getDialogPane().setMinWidth(420);   
+        alert.getDialogPane().setMinWidth(420);
         alert.setTitle("Error");
         alert.setHeaderText("something went wrong");
         alert.showAndWait();
-        if(fatal){ 
+        if(fatal){
             System.exit(666);
-        }   
+        }
     }
-    
+
     /**
-     * alerts user to the result of their actions in the login pane 
+     * alerts user to the result of their actions in the login pane
      * @param msg the message to be displayed to the user
      */
     private static void infoAlert(String msg){
@@ -713,23 +702,44 @@ public class MarchMadnessGUI extends Application {
         alert.setContentText(msg);
         alert.showAndWait();
     }
-    
+
     /**
      * Prompts the user to confirm that they want
      * to clear all predictions from their bracket
      * @return true if the yes button clicked, false otherwise
      */
     private static boolean confirmReset(){
-        Alert alert = new Alert(AlertType.CONFIRMATION, 
-                "Are you sure you want to reset the ENTIRE bracket?", 
+        Alert alert = new Alert(AlertType.CONFIRMATION,
+                "Are you sure you want to reset the ENTIRE bracket?",
                 ButtonType.YES,  ButtonType.CANCEL);
         alert.setTitle("March Madness Bracket Simulator");
         alert.setHeaderText(null);
         alert.showAndWait();
         return alert.getResult()==ButtonType.YES;
     }
-    
-    
+
+    private boolean hasCompletedBracket(){
+        for (Bracket b : playerBrackets){
+            if (b != null && b.isComplete()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void updateSimulateButton(){
+        simulate.setDisable(!hasCompletedBracket());
+    }
+
+    private static boolean confirmSimulate(){
+        Alert alert = new Alert(AlertType.CONFIRMATION,
+                "Are you sure you want to simulate the tournament?",
+                ButtonType.YES, ButtonType.CANCEL);
+        alert.setTitle("March Madness Bracket Simulator");
+        alert.setHeaderText(null);
+        alert.showAndWait();
+        return alert.getResult() == ButtonType.YES;
+    }
     /**
      * Tayon Watson 5/5
      * seralizedBracket
