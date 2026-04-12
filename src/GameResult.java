@@ -41,12 +41,12 @@ public class GameResult {
                ", " + team2 +
                " scored = " + score2 +
                "\nWinner = " + winner +
-               " }" 
+               " }" ;
     }
 
     @Override
     public boolean equals(Object obj) {
         if(this == obj) return true;
-        if(obj == null || getClass != obj.getClass) return false;
+        if(obj == null || getClass() != obj.getClass()) return false;
     }
 }
