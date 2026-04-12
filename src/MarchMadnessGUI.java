@@ -133,8 +133,6 @@ public class MarchMadnessGUI extends Application {
         primaryStage.setTitle("March Madness Bracket Simulator");
         primaryStage.setScene(scene);
         primaryStage.show();
-
-        System.out.println(playerBrackets.size());
     }
 
     /**
