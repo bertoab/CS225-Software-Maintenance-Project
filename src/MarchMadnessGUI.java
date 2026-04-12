@@ -237,7 +237,8 @@ public class MarchMadnessGUI extends Application {
                 " simulated tournament respectively. In the simulated bracket, correct predictions are marked" +
                 " in green while incorrect predictions are marked in red. You will receive points for making" +
                 " correct predictions. You can view the scoreboard to see the points you and other accounts" +
-                " have obtained. You can also use the '2017 Real Results' button on the top bar to view the results" +
+                " have obtained. The scoreboard is automatically sorted is descending order by points." +
+                " You can also use the '2017 Real Results' button on the top bar to view the results" +
                 " of the real-life 2017 March Madness tournament.");
 
         // Wrap text
