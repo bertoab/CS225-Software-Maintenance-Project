@@ -52,6 +52,7 @@ public class MarchMadnessGUI extends Application {
     private Button clearButton;
     private Button resetButton;
     private Button finalizeButton;
+    private Button autoFillButton;
 
     // Matthew Tummino
     //Used to cycle between brackets to compare to the simulated bracket
@@ -304,10 +305,19 @@ public class MarchMadnessGUI extends Application {
      * for final4 reset Ro2 and winner
      */
     private void clear(){
-        bracketPane.clear();
+      if (bracketPane.getDisplayedSubtree() == 7) {
+        selectedBracket = new Bracket(TournamentInfo.getEmptyBracket());
         bracketPane = new BracketPane(selectedBracket);
         displayPane(bracketPane);
         updateSimulateButton();
+      } else {
+      
+         bracketPane.clear();
+         bracketPane=new BracketPane(selectedBracket);
+         displayPane(bracketPane);
+         updateSimulateButton();
+      }
+        
     }
 
     /**
@@ -328,6 +338,12 @@ public class MarchMadnessGUI extends Application {
             displayPane(bracketPane);
             updateSimulateButton();
         }
+    }
+
+    private void autoFill() {
+        TournamentInfo.autoFill(selectedBracket);
+        bracketPane = new BracketPane(selectedBracket);
+        displayPane(bracketPane);
     }
 
     private void finalizeBracket(){
@@ -373,6 +389,7 @@ public class MarchMadnessGUI extends Application {
 
         clearButton=new Button("Clear");
         resetButton=new Button("Reset");
+        autoFillButton=new Button("Auto Fill");
         //CHRIS
         finalizeButton=new Button("Save");
 
@@ -412,6 +429,7 @@ public class MarchMadnessGUI extends Application {
                 clearButton,
                 resetButton,
                 finalizeButton,
+                autoFillButton,
                 back=new Button("Choose Division"),
                 createSpacer()
         );
@@ -448,6 +466,7 @@ public class MarchMadnessGUI extends Application {
         clearButton.setOnAction(e->clear());
         resetButton.setOnAction(e->reset());
         finalizeButton.setOnAction(e->finalizeBracket());
+        autoFillButton.setOnAction(e->autoFill());
         back.setOnAction(e->{
             bracketPane=new BracketPane(selectedBracket);
             displayPane(bracketPane);
