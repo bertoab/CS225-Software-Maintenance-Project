@@ -34,6 +34,10 @@ public class ScoreBoardTable {
         data = FXCollections.observableArrayList();
         scores = new HashMap<>();
 
+        //New - Joey
+        String colStyle = "-fx-background-color: #2e292a; -fx-text-fill: #a9a073; -fx-font-weight: bold;" + 
+                          "-fx-font-size: 12px; -fx-alignment: CENTER;";
+
         /**
          * TableColumn userNameCol is the column on the left side of the table.
          * userNameCol.setCellValueFactory() passes the data to the TableView object, which is
@@ -43,7 +47,7 @@ public class ScoreBoardTable {
         TableColumn<Bracket, String> userNameCol = new TableColumn<>("Username");
         userNameCol.setMinWidth(140);
         userNameCol.setMaxWidth(140);
-        userNameCol.setStyle("-fx-border-width: 3px");
+        userNameCol.setStyle(colStyle);
         userNameCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Bracket, String>, ObservableValue<String>>() {
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Bracket, String> b) {
                 return new SimpleStringProperty(b.getValue().getPlayerName());
@@ -61,14 +65,14 @@ public class ScoreBoardTable {
         TableColumn<Bracket, Number> totalPtsCol = new TableColumn<>("Total Points");
         totalPtsCol.setMinWidth(140);
         totalPtsCol.setMaxWidth(140);
-        totalPtsCol.setStyle("-fx-border-width: 3px");
+        totalPtsCol.setStyle(colStyle);
         totalPtsCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Bracket, Number>, ObservableValue<Number>>() {
             public ObservableValue<Number> call(TableColumn.CellDataFeatures<Bracket, Number> b) {
                 return new SimpleIntegerProperty(scores.get(b.getValue()));
             }
         });
         totalPtsCol.setSortable(true);
-        totalPtsCol.setSortType(TableColumn.SortType.ASCENDING); //sorts column from highest to lowest
+        totalPtsCol.setSortType(TableColumn.SortType.DESCENDING); //sorts column from highest to lowest
 
         /**
          * TableView table_view is what the user sees in the GUI. This creates the table.
@@ -79,6 +83,11 @@ public class ScoreBoardTable {
         table.setEditable(false);
         table.getColumns().setAll(userNameCol, totalPtsCol);
         table.getSortOrder().addAll(totalPtsCol, userNameCol);
+
+        //New - Joey
+        table.setStyle("-fx-background-color: #231f20; -fx-border-color: #3a3435; " + 
+                       "-fx-table-cell-border-color: #3a3435;"
+        );
     }
 
     public TableView<Bracket> start() {

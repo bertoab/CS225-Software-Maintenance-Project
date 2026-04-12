@@ -182,4 +182,36 @@ public class TournamentInfo{//renamed from teamInfo by matt 5/4
                 bracket.moveTeamUp(index2);
         }
     }
+    // DANIELLE: toString() and equals() override
+    /**
+     * Represents the TournamentInfo object as a String.
+     * @return the object's String representation.
+     */
+    @Override
+    public String toString() {
+        return teams.toString();
+    }
+
+    /**
+     * Compares a given object to this.
+     * @param obj the object to compare with.
+     * @return whether the objects are the same.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        // Check if objects are the same in memory
+        if(this == obj) {
+            return true;
+        }
+
+        // Check if obj is null or is a TournamentInfo
+        if(obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        // Cast obj to a TournamentInfo and compare teams HashMap
+        TournamentInfo tournamentInfo = (TournamentInfo) obj;
+        return this.toString().equals(tournamentInfo.toString());
+    }
+
 }
