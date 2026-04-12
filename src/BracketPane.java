@@ -37,7 +37,8 @@ public class BracketPane extends BorderPane {
         /**
          * Used to initiate the paint of the bracket nodes
          */
-        private static boolean isTop = true;
+        //LIOR: commented out this attribute and the one reference to it because it's not doing anything
+        // private static boolean isTop = true;
         /**
          * Maps the text "buttons" to it's respective grid-pane
          */
@@ -126,8 +127,9 @@ public class BracketPane extends BorderPane {
          */
         private EventHandler<MouseEvent> enter = mouseEvent -> {
                 BracketNode tmp = (BracketNode) mouseEvent.getSource();
-                tmp.setStyle("-fx-background-color: lightcyan;");
-                tmp.setEffect(new InnerShadow(10, Color.LIGHTCYAN));
+
+                //New - Joey
+                tmp.setStyle("-fx-background-color: #3a3435; -fx-border-color: #fe6229;");
         };
 
         /**
@@ -147,6 +149,11 @@ public class BracketPane extends BorderPane {
         private GridPane center;
         private GridPane fullPane;
 
+        // DANIELLE: default constructor
+        /**
+         * Default class constructor.
+         */
+        public BracketPane() {}
 
         /**
          * TODO: Reduce. reuse, recycle!
@@ -163,6 +170,10 @@ public class BracketPane extends BorderPane {
                 ArrayList<Root> roots = new ArrayList<>();
 
                 center = new GridPane();
+
+                //New - Joey
+                String darkBg = "-fx-background-color: #231f20;";
+                center.setStyle(darkBg);
 
                 ArrayList<StackPane> buttons = new ArrayList<>();
                 buttons.add(customButton("EAST"));
@@ -182,17 +193,24 @@ public class BracketPane extends BorderPane {
                 //buttons.add(customButton("FINAL"));
                 //panes.put(buttons.get(5), finalPane);
                 fullPane = new GridPane();
+                fullPane.setStyle(darkBg);
+
                 GridPane gp1 = new GridPane();
                 gp1.add(roots.get(0), 0, 0);
                 gp1.add(roots.get(1), 0, 1);
+                gp1.setStyle(darkBg);
+
                 GridPane gp2 = new GridPane();
                 gp2.add(roots.get(2), 0, 0);
                 gp2.add(roots.get(3), 0, 1);
+                gp2.setStyle(darkBg);
+
                 gp2.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
 
                 fullPane.add(gp1, 0, 0);
                 fullPane.add(finalPane, 1, 0, 1, 2);
                 fullPane.add(gp2, 2, 0);
+
                 fullPane.setAlignment(Pos.CENTER);
                 panes.put(buttons.get((buttons.size() - 1)), fullPane);
                 finalPane.toBack();
@@ -208,12 +226,10 @@ public class BracketPane extends BorderPane {
 
                 for (StackPane t : buttons) {
                         t.setOnMouseEntered(mouseEvent -> {
-                                t.setStyle("-fx-background-color: lightblue;");
-                                t.setEffect(new InnerShadow(10, Color.LIGHTCYAN));
+                                t.setStyle("-fx-background-color: #3a3435; -fx-border-color: #fe6229;");
                         });
                         t.setOnMouseExited(mouseEvent -> {
-                                t.setStyle("-fx-background-color: orange;");
-                                t.setEffect(null);
+                                t.setStyle("-fx-background-color: #2e292a; -fx-border-color: #3a3435; -fx-border-width: 0 0 1 0;");
                         });
                         t.setOnMouseClicked(mouseEvent -> {
                                 setCenter(null);
@@ -317,8 +333,13 @@ public class BracketPane extends BorderPane {
                 Rectangle r = new Rectangle(100, 50, Color.TRANSPARENT);
                 Text t = new Text(name);
                 t.setTextAlignment(TextAlignment.CENTER);
+
+                //New - Joey
+                t.setStyle("-fx-fill: #a9a073; -fx-font-family: Arial; -fx-font-weight: bold; -fx-font-size: 12px;");
+                
                 pane.getChildren().addAll(r, t);
-                pane.setStyle("-fx-background-color: orange;");
+                //New - Joey
+                pane.setStyle("-fx-background-color: #2e292a; -fx-border-color: #3a3435; -fx-border-width: 0 0 1 0;");
                 return pane;
         }
 
@@ -327,9 +348,9 @@ public class BracketPane extends BorderPane {
                 BracketNode nodeFinal0 = new BracketNode("", 162, 300, 70, 0);
                 BracketNode nodeFinal1 = new BracketNode("", 75, 400, 70, 0);
                 BracketNode nodeFinal2 = new BracketNode("", 250, 400, 70, 0);
-                nodeFinal0.setName(currentBracket.getBracket().get(0));
-                nodeFinal1.setName(currentBracket.getBracket().get(1));
-                nodeFinal2.setName(currentBracket.getBracket().get(2));
+                nodeFinal0.setName(currentBracket.getBracket().get(0), currentBracket.getCorrect(0));
+                nodeFinal1.setName(currentBracket.getBracket().get(1), currentBracket.getCorrect(1));
+                nodeFinal2.setName(currentBracket.getBracket().get(2), currentBracket.getCorrect(2));
                 finalPane.getChildren().add(nodeFinal0);
                 finalPane.getChildren().add(nodeFinal1);
                 finalPane.getChildren().add(nodeFinal2);
@@ -351,10 +372,13 @@ public class BracketPane extends BorderPane {
                 nodeFinal2.setOnMouseClicked(clicked);
                 nodeFinal2.setOnMouseDragEntered(enter);
                 nodeFinal2.setOnMouseDragExited(exit);
-                nodeFinal0.setStyle("-fx-border-color: darkblue");
-                nodeFinal1.setStyle("-fx-border-color: darkblue");
-                nodeFinal2.setStyle("-fx-border-color: darkblue");
+                nodeFinal0.setStyle("-fx-border-color: #fe6229; -fx-border-width: 2;");
+                nodeFinal1.setStyle("-fx-border-color: #70684e;");
+                nodeFinal2.setStyle("-fx-border-color: #70684e;");
                 finalPane.setMinWidth(400.0);
+
+                //New - Joey
+                finalPane.setStyle("-fx-background-color: #231f20;");
 
                 return finalPane;
         }
@@ -369,11 +393,22 @@ public class BracketPane extends BorderPane {
 
                 public Root(int location) {
                         this.location = location;
-                        createVertices(420, 200, 100, 20, 0, 0);
-                        createVertices(320, 119, 100, 200, 1, 0);
-                        createVertices(220, 60, 100, 100, 2, 200);
-                        createVertices(120, 35, 100, 50, 4, 100);
-                        createVertices(20, 25, 100, 25, 8, 50);
+
+                        //New - Joey
+                        this.setStyle("-fx-background-color: #231f20;");
+
+//                         createVertices(420, 200, 100, 20, 0, 0);
+//                         createVertices(320, 119, 100, 200, 1, 0);
+//                         createVertices(220, 60, 100, 100, 2, 200);
+//                         createVertices(120, 35, 100, 50, 4, 100);
+//                         createVertices(20, 25, 100, 25, 8, 50);
+                        //Matthew Tummino
+                        //Adjusted values to better fit school names and box score
+                        createVertices(700, 200, 170, 20, 0, 0);
+                        createVertices(530, 119, 170, 200, 1, 0);
+                        createVertices(360, 60, 170, 100, 2, 200);
+                        createVertices(190, 35, 170, 50, 4, 100);
+                        createVertices(20, 25, 170, 25, 8, 50);
                         for (BracketNode n : nodes) {
                                 n.setOnMouseClicked(clicked);
                                 n.setOnMouseEntered(enter);
@@ -392,7 +427,7 @@ public class BracketPane extends BorderPane {
                                 BracketNode last = new BracketNode("", iX, y - 20, iXO, 20);
                                 nodes.add(last);
                                 getChildren().addAll(new Line(iX, iY, iX + iXO, iY), last);
-                                last.setName(currentBracket.getBracket().get(location));
+                                last.setName(currentBracket.getBracket().get(location), currentBracket.getCorrect(location));
                                 bracketMap.put(last, location);
                                 nodeMap.put(location, last);
                         } else {
@@ -411,14 +446,25 @@ public class BracketPane extends BorderPane {
                                         Line top = new Line(tl.getX(), tl.getY(), tr.getX(), tr.getY());
                                         Line bottom = new Line(bl.getX(), bl.getY(), br.getX(), br.getY());
                                         Line right = new Line(tr.getX(), tr.getY(), br.getX(), br.getY());
+
+                                        //New - Joey
+                                        String lineStyle = "-fx-stroke: #a9a073; -fx-stroke-width: 1;";
+                                        top.setStyle(lineStyle);
+                                        bottom.setStyle(lineStyle);
+                                        right.setStyle(lineStyle);
+                                        
                                         getChildren().addAll(top, bottom, right, nTop, nBottom);
-                                        isTop = !isTop;
+                                        //LIOR: commented out because this attribute doesn't do anything
+                                        // isTop = !isTop;
                                         y += increment;
                                 }
                                 ArrayList<Integer> tmpHelp = helper(location, num);
                                 for (int j = 0; j < aNodeList.size(); j++) {
                                         //System.out.println(currentBracket.getBracket().get(tmpHelp.get(j)));
-                                        aNodeList.get(j).setName(currentBracket.getBracket().get(tmpHelp.get(j)));
+                                        if(tmpHelp.get(j) < 63 && tmpHelp.get(j) >= 0)
+                                                aNodeList.get(j).setName(currentBracket.getBracket().get(tmpHelp.get(j)),currentBracket.getCorrect(tmpHelp.get(j)));
+                                        else
+                                                aNodeList.get(j).setName(currentBracket.getBracket().get(tmpHelp.get(j)));
                                         bracketMap.put(aNodeList.get(j), tmpHelp.get(j));
                                         nodeMap.put(tmpHelp.get(j), aNodeList.get(j));
                                         //System.out.println(bracketMap.get(aNodeList.get(j)));
@@ -453,6 +499,9 @@ public class BracketPane extends BorderPane {
                         rect = new Rectangle(rX, rY);
                         rect.setFill(Color.TRANSPARENT);
                         name = new Label(teamName);
+
+                        //New - Joey
+                        name.setStyle("-fx-text-fill: #d4e8d9; -fx-font-family: Arial; -fx-font-size: 12px;");
                         // setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
                         name.setTranslateX(5);
                         getChildren().addAll(name, rect);
@@ -465,12 +514,26 @@ public class BracketPane extends BorderPane {
                         return teamName;
                 }
 
+                //adjusted by Matthew Tummino to account for displaying results
+                /**
+                 * @param teamName The name to assign to the node.
+                 * @param correct whether or not game prediction was correct
+                 */
+                public void setName(String teamName, boolean correct) {
+                        this.teamName = teamName;
+                        name.setText(teamName);
+                        
+                        if(correct)
+                                name.setStyle("-fx-text-fill: #38d72a;");
+                }
+                
+
                 /**
                  * @param teamName The name to assign to the node.
                  */
-                public void setName(String teamName) {
-                        this.teamName = teamName;
-                        name.setText(teamName);
+                public void setName(String teamName)
+                {
+                        setName(teamName,false);
                 }
         }
 }
