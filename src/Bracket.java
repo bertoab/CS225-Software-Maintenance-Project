@@ -1,5 +1,6 @@
 import java.util.ArrayList;
-import java.io.Serializable;
+import java.util.Arrays;
+import java.io.Serializable; 
 
 /**
  * Bracket Class
@@ -12,14 +13,24 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     private ArrayList<String> bracket;
     private transient int[] teamScores = new int[127];
     private String playerName;
-    private String password;
+    // LIOR: removed this attribute
+    // private String password;
     static final int EAST_BRACKET = 3;
     static final int WEST_BRACKET = 4;
     static final int MIDWEST_BRACKET = 5;
     static final int SOUTH_BRACKET = 6;
-    public static final long serialVersionUID = 5609181678399742983L;
+    public static final long serialVersionUID = 1L;
+    private Boolean[] correct = new Boolean[63]; // Matthew Tummino: used to mark correct game predictions
+    
 
     //Constructor
+    // DANIELLE: default constructor
+
+    /**
+     * Default class constructor.
+     */
+    public Bracket() {}
+
     /**
      *Cosntructor using an ArrayList of strings to start
      * @param starting, and arraylist containing the 64 teams participating in the tournament
@@ -29,6 +40,7 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         while(bracket.size()<127){
             bracket.add(0,"");
         }
+        Arrays.fill(correct,false);
     }
 
     /**
@@ -42,6 +54,7 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         }*/
         //code above removed and replaced by matt 5/1
         bracket = new ArrayList<String>(starting.getBracket());
+        Arrays.fill(correct,false);
     }
 
     /**
@@ -53,6 +66,7 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     public Bracket(Bracket starting, String user){
         bracket = new ArrayList<String>(starting.getBracket());
         playerName = user;
+        Arrays.fill(correct,false);
     }
 
     //Methods
@@ -136,15 +150,16 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
         bracket.add(position, s);
     }
 
-    /**
+    //LIOR:  this method isn't used anymore
+    /** 
      * Hillary Ssemakula:
      * set player's password to string parameter
      * @param password, a String
      */
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
+    // public void setPassword(String password)
+    // {
+    //     this.password = password;
+    // }
 
     /**
      * Hillary:
@@ -155,23 +170,24 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
     {
         return playerName;
     }
-
-    /**
-     * Hillary:
-     * returns the player's password
-     * @return String
-     */
-    public String getPassword()
-    {
-        return password;
-    }
-
-    /**
-     * Hillary:
-     * returns true or false depending on whether there are any empty slots on the bracket.
-     * If a position has an empty string then the advancing team has not been chosen for that spot and the whole bracket is not complete.
-     * @return boolean.
-     */
+    
+    //LIOR: this method isn't used anymore
+      /** 
+        * Hillary:
+        * returns the player's password
+        * @return String
+        */
+    // public String getPassword()
+    // {
+    //     return password;
+    // }
+    
+      /** 
+        * Hillary:
+        * returns true or false depending on whether there are any empty slots on the bracket.
+        * If a position has an empty string then the advancing team has not been chosen for that spot and the whole bracket is not complete.
+        * @return boolean.
+        */
     public boolean isComplete()
     {
         for(String team: bracket){
@@ -206,28 +222,74 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
      */
     public int scoreBracket(Bracket master){
         int score = 0;
+
+        //Adjustment by Matthew Tummino
+        //Accounts for the box score being added to the winner names in the bracket
+        //Also marks any correctl guessed games
+        for(int i = 0; i < 63; i++)
+        {
+            String masterString = master.getBracket().get(i);
+            int stopIndex = masterString.indexOf("[");
+            if (stopIndex != -1)
+                masterString = masterString.substring(0, stopIndex-1);
+            if (bracket.get(i).equals(masterString))
+            {
+                correct[i] = true;
+                if(i == 0)
+                    score+=32;
+                else if( i >= 1 && i < 3)
+                    score+=16;
+                else if( i >= 3 && i < 7)
+                    score+=8;
+                else if( i >= 7 && i < 15)
+                    score+=4;
+                else if( i >= 15 && i < 31)
+                    score+=2;
+                else if( i >= 31 && i < 63)
+                    score+=1;
+            }
+        }
+        /*
         if (bracket.get(0).equals(master.getBracket().get(0)))//finals
+        {   
             score+=32;
+        }
         for (int i = 1; i < 3; i++) {
+            System.out.print(i + " ");
             if (bracket.get(i).equals(master.getBracket().get(i)))//semi
+            {
                 score+=16;
+            }
         }
         for (int i = 3; i < 7; i++) {
+            System.out.print(i + " ");
             if (bracket.get(i).equals(master.getBracket().get(i)))//quarters
+            {
                 score+=8;
+            }
         }
         for (int i = 7; i < 15; i++) {
+            System.out.print(i + " ");
             if (bracket.get(i).equals(master.getBracket().get(i)))//sweet 16
+            {
                 score+=4;
+            }
         }
         for (int i = 15; i < 31; i++) {
+            System.out.print(i + " ");
             if (bracket.get(i).equals(master.getBracket().get(i)))//round of 32
+            {
                 score+=2;
+            }
         }
         for (int i = 31; i < 63; i++) {
+            System.out.print(i + " ");
             if (bracket.get(i).equals(master.getBracket().get(i)))//round of 64
+            {
                 score+=1;
+            }
         }
+        */
         return score;
     }
 
@@ -283,5 +345,83 @@ public class Bracket implements Serializable //Hillary: This bracket class is to
                 moveTeamUp(index2);
             }
         }
+
+        for(int i = 62; i>= 0; i--)
+        {
+            int index1 = 2*i+1;
+            int index2 = 2*i+2;
+
+            bracket.set(i, bracket.get(i) + " [" + teamScores[index1] + "-" + teamScores[index2] +"]");
+        }
+
     }
+
+    /**
+     * @author Matthew Tummino
+     * Returns whether the team predicted for game at position i in the bracket was correct
+     * @param i the position in the bracket
+     * @return true if the game was pedicted correctly
+     */
+    public boolean getCorrect(int i)
+    {
+        return correct[i];
+    }
+
+    /**
+     * @author Matthew Tummino
+     * Returns a Boolean array of the correct predictions values of the bracket
+     * @return the correct predictions array of the bracket
+     */
+    public Boolean[] getCorrectArray()
+    {
+        return correct;
+    }
+
+    /**
+     * @author Matthew Tummino
+     * Set the correct array of the bracket to match the provided Boolean array
+     * @param match the Boolean array to be matched
+     */
+    public void matchCorrect(Boolean[] match)
+    {
+        for(int i = 0; i < correct.length; i++)
+        {
+            correct[i] = match[i];
+        }
+    }
+
+    // DANIELLE: toString() and equals() override
+    /**
+     * Represents the Bracket object as a String.
+     * @return the object's String representation.
+     */
+    @Override
+    public String toString() {
+        return playerName + ", " + bracket.toString();
+    }
+
+    /**
+     * Compares a given object to this.
+     * @param obj the object to compare with.
+     * @return whether the objects are the same.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        // Check if objects are the same in memory
+        if(this == obj) {
+            return true;
+        }
+
+        // Check if obj is null or is a Bracket
+        if(obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        // Cast obj to a Bracket and compare fields
+        Bracket bracket = (Bracket) obj;
+
+        return this.getBracket().equals(bracket.getBracket())
+                && this.getPlayerName().equals(bracket.getPlayerName());
+    }
+
 }

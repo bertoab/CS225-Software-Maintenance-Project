@@ -1,0 +1,489 @@
+{
+  "season": "2017",
+  "champion": "North Carolina",
+  "rounds": [
+    {
+      "name": "Round of 64",
+      "bracketIndexStart": 31,
+      "bracketIndexEnd": 62,
+      "games": [
+        {
+          "bracketIndex": 31,
+          "region": "East",
+          "team1": { "name": "Villanova",   "score": 76 },
+          "team2": { "name": "Mt. St. Mary's", "score": 56 },
+          "winner": "Villanova"
+        },
+	{
+	  "bracketIndex": 32,
+          "region": "East",
+          "team1": { "name": "Wisconsin",   "score": 84 },
+          "team2": { "name": "Virginia Tech", "score": 74 },
+          "winner": "Wisconsin"
+	},
+	{
+	  "bracketIndex": 33,
+          "region": "East",
+          "team1": { "name": "Virginia",   "score": 76 },
+          "team2": { "name": "UNCW", "score": 71 },
+          "winner": "Virginia"
+	},
+	{
+	  "bracketIndex": 34,
+          "region": "East",
+          "team1": { "name": "Florida",   "score": 80 },
+          "team2": { "name": "East Tenn. St.", "score": 65 },
+          "winner": "Florida"
+	},
+	{
+	  "bracketIndex": 35,
+          "region": "East",
+          "team1": { "name": "SMU",   "score": 65 },
+          "team2": { "name": "USC", "score": 66 },
+          "winner": "USC"
+	},
+	{
+	  "bracketIndex": 36,
+          "region": "East",
+          "team1": { "name": "Baylor",   "score": 91 },
+          "team2": { "name": "New Mexico St.", "score": 73 },
+          "winner": "Baylor"
+	},
+	{
+	  "bracketIndex": 37,
+          "region": "East",
+          "team1": { "name": "South Carolina",   "score": 93 },
+          "team2": { "name": "Marquette", "score": 73 },
+          "winner": "South Carolina"
+	},
+	{
+	  "bracketIndex": 38,
+          "region": "East",
+          "team1": { "name": "Duke",   "score": 87 },
+          "team2": { "name": "Troy", "score": 65 },
+          "winner": "Duke"
+	},
+	{
+          "bracketIndex": 39,
+          "region": "Midwest",
+          "team1": { "name": "Kansas",   "score": 100 },
+          "team2": { "name": "UC Davis", "score": 62 },
+          "winner": "Kansas"
+        },
+	{
+	  "bracketIndex": 40,
+          "region": "Midwest",
+          "team1": { "name": "Miami(Fla.)",   "score": 58 },
+          "team2": { "name": "Michigan St.", "score": 78 },
+          "winner": "Michigan St."
+	},
+	{
+	  "bracketIndex": 41,
+          "region": "Midwest",
+          "team1": { "name": "Iowa St.",   "score": 84 },
+          "team2": { "name": "Nevada", "score": 73 },
+          "winner": "Iowa St."
+	},
+	{
+	  "bracketIndex": 42,
+          "region": "Midwest",
+          "team1": { "name": "Purdue",   "score": 80 },
+          "team2": { "name": "Vermont", "score": 70 },
+          "winner": "Purdue"
+	},
+	{
+	  "bracketIndex": 43,
+          "region": "Midwest",
+          "team1": { "name": "Creighton",   "score": 72 },
+          "team2": { "name": "Rhode Island", "score": 84 },
+          "winner": "Rhode Island"
+	},
+	{
+	  "bracketIndex": 44,
+          "region": "Midwest",
+          "team1": { "name": "Oregon",   "score": 93 },
+          "team2": { "name": "Iona", "score": 77 },
+          "winner": "Oregon"
+	},
+	{
+	  "bracketIndex": 45,
+          "region": "Midwest",
+          "team1": { "name": "Michigan",   "score": 92 },
+          "team2": { "name": "Oklahoma State", "score": 91 },
+          "winner": "Michigan"
+	},
+	{
+	  "bracketIndex": 46,
+          "region": "Midwest",
+          "team1": { "name": "Louisville",   "score": 78 },
+          "team2": { "name": "Jacksonville St.", "score": 63 },
+          "winner": "Louisville"
+	},
+	{
+          "bracketIndex": 47,
+          "region": "West",
+          "team1": { "name": "Gonzaga",   "score": 66 },
+          "team2": { "name": "South Dakota St.", "score": 46 },
+          "winner": "Gonzaga"
+        },
+	{
+	  "bracketIndex": 48,
+          "region": "West",
+          "team1": { "name": "Northwestern",   "score": 68 },
+          "team2": { "name": "Vanderbilt", "score": 66 },
+          "winner": "Northwestern"
+	},
+	{
+	  "bracketIndex": 49,
+          "region": "West",
+          "team1": { "name": "Notre Dame",   "score": 60 },
+          "team2": { "name": "Princeton", "score": 58 },
+          "winner": "Notre Dame"
+	},
+	{
+	  "bracketIndex": 50,
+          "region": "West",
+          "team1": { "name": "West Virginia",   "score": 86 },
+          "team2": { "name": "Bucknell", "score": 80 },
+          "winner": "West Virginia"
+	},
+	{
+	  "bracketIndex": 51,
+          "region": "West",
+          "team1": { "name": "Maryland",   "score": 65 },
+          "team2": { "name": "Xavier", "score": 76 },
+          "winner": "Xavier"
+	},
+	{
+	  "bracketIndex": 52,
+          "region": "West",
+          "team1": { "name": "Florida State",   "score": 86 },
+          "team2": { "name": "FGCU", "score": 80 },
+          "winner": "Florida State"
+	},
+	{
+	  "bracketIndex": 53,
+          "region": "West",
+          "team1": { "name": "St. Mary's(Cal.)",   "score": 85 },
+          "team2": { "name": "VCU", "score": 77 },
+          "winner": "St. Mary's(Cal.)"
+	},
+	{
+	  "bracketIndex": 54,
+          "region": "West",
+          "team1": { "name": "Arizona",   "score": 100 },
+          "team2": { "name": "North Dakota", "score": 82 },
+          "winner": "Arizona"
+	},
+	{
+          "bracketIndex": 55,
+          "region": "South",
+          "team1": { "name": "North Carolina",   "score": 103 },
+          "team2": { "name": "Texas Southern", "score": 64 },
+          "winner": "North Carolina"
+        },
+	{
+	  "bracketIndex": 56,
+          "region": "South",
+          "team1": { "name": "Arkansas",   "score": 77 },
+          "team2": { "name": "Seton Hall", "score": 71 },
+          "winner": "Arkansas"
+	},
+	{
+	  "bracketIndex": 57,
+          "region": "South",
+          "team1": { "name": "Minnesota",   "score": 72 },
+          "team2": { "name": "Middle Tenn.", "score": 81 },
+          "winner": "Middle Tenn."
+	},
+	{
+	  "bracketIndex": 58,
+          "region": "South",
+          "team1": { "name": "Butler",   "score": 76 },
+          "team2": { "name": "Winthrop", "score": 64 },
+          "winner": "Butler"
+	},
+	{
+	  "bracketIndex": 59,
+          "region": "South",
+          "team1": { "name": "Cincinnati",   "score": 75 },
+          "team2": { "name": "Kansas St.", "score": 61 },
+          "winner": "Cincinnati"
+	},
+	{
+	  "bracketIndex": 60,
+          "region": "South",
+          "team1": { "name": "UCLA",   "score": 97 },
+          "team2": { "name": "Kent State", "score": 80 },
+          "winner": "UCLA"
+	},
+	{
+	  "bracketIndex": 61,
+          "region": "South",
+          "team1": { "name": "Dayton",   "score": 58 },
+          "team2": { "name": "Wichita State", "score": 64 },
+          "winner": "Wichita State"
+	},
+	{
+	  "bracketIndex": 62,
+          "region": "South",
+          "team1": { "name": "Kentucky",   "score": 79 },
+          "team2": { "name": "Northern Kentucky", "score": 70 },
+          "winner": "Kentucky"
+	}
+      ]
+    },
+    {
+      "name": "Round of 32",
+      "bracketIndexStart": 15,
+      "bracketIndexEnd": 30,
+      "games": [
+        {
+          "bracketIndex": 15,
+          "region": "East",
+          "team1": { "name": "Villanova",   "score": 62 },
+          "team2": { "name": "Wisconsin", "score": 65 },
+          "winner": "Wisconsin"
+        },
+	{
+	  "bracketIndex": 16,
+          "region": "East",
+          "team1": { "name": "Virginia",   "score": 39 },
+          "team2": { "name": "Florida", "score": 65 },
+          "winner": "Florida"
+	},
+	{
+	  "bracketIndex": 17,
+          "region": "East",
+          "team1": { "name": "USC",   "score": 78 },
+          "team2": { "name": "Baylor", "score": 82 },
+          "winner": "Baylor"
+	},
+	{
+	  "bracketIndex": 18,
+          "region": "East",
+          "team1": { "name": "South Carolina",   "score": 88 },
+          "team2": { "name": "Duke", "score": 81 },
+          "winner": "South Carolina"
+	},
+	{
+	  "bracketIndex": 19,
+          "region": "Midwest",
+          "team1": { "name": "Kansas",   "score": 90 },
+          "team2": { "name": "Michigan St.", "score": 70 },
+          "winner": "Kansas"
+	},
+	{
+	  "bracketIndex": 20,
+          "region": "Midwest",
+          "team1": { "name": "Iowa St.",   "score": 76 },
+          "team2": { "name": "Purdue", "score": 80 },
+          "winner": "Purdue"
+	},
+	{
+	  "bracketIndex": 21,
+          "region": "Midwest",
+          "team1": { "name": "Rhode Island",   "score": 72 },
+          "team2": { "name": "Oregon", "score": 75 },
+          "winner": "Oregon"
+	},
+	{
+	  "bracketIndex": 22,
+          "region": "Midwest",
+          "team1": { "name": "Michigan",   "score": 73 },
+          "team2": { "name": "Louisville", "score": 69 },
+          "winner": "Michigan"
+	},
+        {
+          "bracketIndex": 23,
+          "region": "West",
+          "team1": { "name": "Gonzaga",   "score": 79 },
+          "team2": { "name": "Northwestern", "score": 73 },
+          "winner": "Gonzaga"
+        },
+	{
+	  "bracketIndex": 24,
+          "region": "West",
+          "team1": { "name": "Notre Dame",   "score": 71 },
+          "team2": { "name": "West Virginia", "score": 83 },
+          "winner": "West Virginia"
+	},
+	{
+	  "bracketIndex": 25,
+          "region": "West",
+          "team1": { "name": "Xavier",   "score": 91 },
+          "team2": { "name": "Florida St.", "score": 66 },
+          "winner": "Xavier"
+	},
+	{
+	  "bracketIndex": 26,
+          "region": "West",
+          "team1": { "name": "Saint Mary's(Cal.)",   "score": 60 },
+          "team2": { "name": "Arizona", "score": 69 },
+          "winner": "Arizona"
+	},
+	{
+	  "bracketIndex": 27,
+          "region": "South",
+          "team1": { "name": "North Carolina",   "score": 72 },
+          "team2": { "name": "Arkansas", "score": 65 },
+          "winner": "North Carolina"
+	},
+	{
+	  "bracketIndex": 28,
+          "region": "South",
+          "team1": { "name": "Middle Tenn.",   "score": 65 },
+          "team2": { "name": "Butler", "score": 74 },
+          "winner": "Butler"
+	},
+	{
+	  "bracketIndex": 29,
+          "region": "South",
+          "team1": { "name": "Cincinnati",   "score": 67 },
+          "team2": { "name": "UCLA", "score": 79 },
+          "winner": "UCLA"
+	},
+	{
+	  "bracketIndex": 30,
+          "region": "South",
+          "team1": { "name": "Wichita State",   "score": 62 },
+          "team2": { "name": "Kentucky", "score": 65 },
+          "winner": "Kentucky"
+	}
+      ]
+    },
+    {
+      "name": "Sweet 16",
+      "bracketIndexStart": 7,
+      "bracketIndexEnd": 14,
+      "games": [
+        {
+          "bracketIndex": 7,
+          "region": "East",
+          "team1": { "name": "Wisconsin",   "score": 83 },
+          "team2": { "name": "Florida", "score": 84 },
+          "winner": "Florida"
+        },
+	{
+	  "bracketIndex": 8,
+          "region": "East",
+          "team1": { "name": "Baylor",   "score": 50 },
+          "team2": { "name": "South Carolina", "score": 70 },
+          "winner": "South Carolina"
+	},
+	{
+	  "bracketIndex": 9,
+          "region": "Midwest",
+          "team1": { "name": "Kansas",   "score": 98 },
+          "team2": { "name": "Purdue", "score": 66 },
+          "winner": "Kansas"
+	},
+	{
+	  "bracketIndex": 10,
+          "region": "Midwest",
+          "team1": { "name": "Oregon",   "score": 69 },
+          "team2": { "name": "Michigan", "score": 68 },
+          "winner": "Oregon"
+	},
+	{
+	  "bracketIndex": 11,
+          "region": "West",
+          "team1": { "name": "Gonzaga",   "score": 61 },
+          "team2": { "name": "West Virginia", "score": 58 },
+          "winner": "Gonzaga"
+	},
+	{
+	  "bracketIndex": 12,
+          "region": "West",
+          "team1": { "name": "Xavier",   "score": 73 },
+          "team2": { "name": "Arizona", "score": 71 },
+          "winner": "Xavier"
+	},
+	{
+	  "bracketIndex": 13,
+          "region": "South",
+          "team1": { "name": "North Carolina",   "score": 92 },
+          "team2": { "name": "Butler", "score": 80 },
+          "winner": "North Carolina"
+	},
+	{
+	  "bracketIndex": 14,
+          "region": "South",
+          "team1": { "name": "UCLA",   "score": 75 },
+          "team2": { "name": "Kentucky", "score": 86 },
+          "winner": "Kentucky"
+	}
+      ]
+    },
+    {
+      "name": "Elite 8",
+      "bracketIndexStart": 3,
+      "bracketIndexEnd": 6,
+      "games": [
+	{
+	  "bracketIndex": 3,
+          "region": "East",
+          "team1": { "name": "Florida",   "score": 70 },
+          "team2": { "name": "South Carolina", "score": 77 },
+          "winner": "South Carolina"
+	},
+	{
+	  "bracketIndex": 4,
+          "region": "Midwest",
+          "team1": { "name": "Kansas",   "score": 60 },
+          "team2": { "name": "Oregon", "score": 74 },
+          "winner": "Oregon"
+	},
+	{
+	  "bracketIndex": 5,
+          "region": "West",
+          "team1": { "name": "Gonzaga",   "score": 83 },
+          "team2": { "name": "Xavier", "score": 59 },
+          "winner": "Gonzaga"
+	},
+	{
+	  "bracketIndex": 6,
+          "region": "South",
+          "team1": { "name": "North Carolina",   "score": 75 },
+          "team2": { "name": "Kentucky", "score": 73 },
+          "winner": "North Carolina"
+	}
+      ]
+    },
+    {
+      "name": "Final Four",
+      "bracketIndexStart": 1,
+      "bracketIndexEnd": 2,
+      "games": [
+        {
+          "bracketIndex": 1,
+          "region": "FinalFour",
+          "team1": { "name": "North Carolina", "score": 77 },
+          "team2": { "name": "Oregon",          "score": 76 },
+          "winner": "North Carolina"
+        },
+        {
+          "bracketIndex": 2,
+          "region": "FinalFour",
+          "team1": { "name": "Gonzaga",   "score": 77 },
+          "team2": { "name": "South Carolina", "score": 73 },
+          "winner": "Gonzaga"
+        }
+      ]
+    },
+    {
+      "name": "Championship",
+      "bracketIndexStart": 0,
+      "bracketIndexEnd": 0,
+      "games": [
+        {
+          "bracketIndex": 0,
+          "region": "Championship",
+          "team1": { "name": "North Carolina", "score": 71 },
+          "team2": { "name": "Gonzaga",         "score": 65 },
+          "winner": "North Carolina"
+        }
+      ]
+    }
+  ]
+}
