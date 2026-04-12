@@ -14,7 +14,13 @@ public class Team{
   private int ranking;
   public double offensePPG;
   public double defensePPG;
-  
+
+  // DANIELLE: default constructor
+  /**
+   * Default class constructor.
+   */
+  public Team() {}
+
   /**
    * Constructor
    * @param name 
@@ -122,4 +128,44 @@ public class Team{
   public void setOffense(double newOffense){
 	  offensePPG =  newOffense;
   }
+
+  // DANIELLE: toString() and equals() override
+  /**
+   * Represents the object as a String.
+   * @return the object's String representation.
+   */
+  @Override
+  public String toString() {
+    return this.name + ", " + this.nickname + ", " + this.info + ", " +
+            this.ranking + ", " + this.offensePPG + ", " + this.defensePPG;
+  }
+
+  /**
+   * Compares a given object to this.
+   * @param obj the object to compare with.
+   * @return whether the objects are the same.
+   */
+  @Override
+  public boolean equals(Object obj) {
+    // Check if objects are the same in memory
+    if(this == obj) {
+      return true;
+    }
+
+    // Check if obj is null or is a Team
+    if(obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+
+    // Cast obj to a Team and compare fields
+    Team team = (Team) obj;
+
+    return this.name.equals(team.getName())
+            && this.nickname.equals(team.getNickname())
+            && this.info.equals(team.getInfo())
+            && this.ranking == team.getRanking()
+            && this.offensePPG == team.getOffensePPG()
+            && this.defensePPG == team.getDefensePPG();
+  }
+
 }

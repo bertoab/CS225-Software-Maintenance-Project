@@ -223,13 +223,19 @@ public class MarchMadnessGUI extends Application {
                 " To clear your choices on a particular bracket, use the 'Clear'" +
                 " button on the bottom bar. To clear all of your choices on every bracket," +
                 " use the 'Reset' button on the bottom bar. To choose a different division to view," +
-                " use the 'Choose Division' button on the bottom bar.\n\n" +
+                " use the 'Choose Division' button on the bottom bar. All changes to your bracket will be saved" +
+                " to your account.\n\n" +
                 "When you are ready to finalize your choices, click the 'Finalize' button on the bottom bar." +
                 " You will not be able to change your bracket choices after finalizing." +
                 " After finalizing your choices, click the 'Simulate' button on the top bar" +
                 " to simulate the tournament. You can now use the 'ScoreBoard' and 'View Simulated Bracket'" +
                 " buttons on the top bar to view user scores and the bracket" +
-                " simulated tournament respectively.");
+                " simulated tournament respectively. In the simulated bracket, correct predictions are marked" +
+                " in green while incorrect predictions are marked in red. You will receive points for making" +
+                " correct predictions. You can view the scoreboard to see the points you and other accounts" +
+                " have obtained. The scoreboard is automatically sorted is descending order by points." +
+                " You can also use the '2017 Real Results' button on the top bar to view the results" +
+                " of the real-life 2017 March Madness tournament.");
 
         // Wrap text
         helpText.wrappingWidthProperty().bind(helpStage.widthProperty().subtract(40));
@@ -240,7 +246,7 @@ public class MarchMadnessGUI extends Application {
         helpRoot.setPadding(new Insets(20));
         helpRoot.getChildren().add(helpText);
 
-        Scene helpScene = new Scene(helpRoot, 500, 300);
+        Scene helpScene = new Scene(helpRoot, 500, 360);
         helpStage.setTitle("Instructions");
         helpStage.setScene(helpScene);
         helpStage.show();
