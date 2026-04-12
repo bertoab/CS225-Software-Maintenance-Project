@@ -30,4 +30,23 @@ public class GameResult {
     public String getTeam2() { return this.team2;}
     public int getScore2() { return this.score2;}
     public String getWinner() { return this.winner;}
+
+    @Override
+    public String toString() {
+        return "GameResult { \n" + 
+               "bracketIndex = " + bracketIndex +
+               ", region = " + region +
+               ", " + team1 + 
+               " scored = " + score1 + 
+               ", " + team2 +
+               " scored = " + score2 +
+               "\nWinner = " + winner +
+               " }" 
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) return true;
+        if(obj == null || getClass != obj.getClass) return false;
+    }
 }
