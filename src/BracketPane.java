@@ -37,7 +37,8 @@ public class BracketPane extends BorderPane {
         /**
          * Used to initiate the paint of the bracket nodes
          */
-        private static boolean isTop = true;
+        //LIOR: commented out this attribute and the one reference to it because it's not doing anything
+        // private static boolean isTop = true;
         /**
          * Maps the text "buttons" to it's respective grid-pane
          */
@@ -442,7 +443,8 @@ public class BracketPane extends BorderPane {
                                         right.setStyle(lineStyle);
                                         
                                         getChildren().addAll(top, bottom, right, nTop, nBottom);
-                                        isTop = !isTop;
+                                        //LIOR: commented out because this attribute doesn't do anything
+                                        // isTop = !isTop;
                                         y += increment;
                                 }
                                 ArrayList<Integer> tmpHelp = helper(location, num);
